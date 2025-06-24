@@ -1,23 +1,25 @@
-# AchievementsReimagined
-This is where she makes a mod.
+# Achievements Reimagined
 
-<img src="logo.png" width="150" alt="the mod's logo" />
+<img src="logo.png" width="150" alt="Achievements Reimagined logo" />
 
-*Update logo.png to change your mod's icon (please)*
+This mod adds a brand new look to the achievements menu!
 
-## Getting started
-We recommend heading over to [the getting started section on our docs](https://docs.geode-sdk.org/getting-started/) for useful info on what to do next.
+- No more clicking through 50 pages to find an achievement.
+- All achievements are sorted into categories to make finding them easier.
+- The achievements are displayed in a much nicer format.
+- More helpful descriptions for completing some achievements.
 
-## Build instructions
-For more info, see [our docs](https://docs.geode-sdk.org/getting-started/create-mod#build)
-```sh
-# Assuming you have the Geode CLI set up already
-geode build
-```
+# Credits
 
-# Resources
-* [Geode SDK Documentation](https://docs.geode-sdk.org/)
-* [Geode SDK Source Code](https://github.com/geode-sdk/geode/)
-* [Geode CLI](https://github.com/geode-sdk/cli)
-* [Bindings](https://github.com/geode-sdk/bindings/)
-* [Dev Tools](https://github.com/geode-sdk/DevTools)
+- GlowRock: For inspiration and coding help from your 'Better Unlock Progression' mod.
+- GD Wiki: For better descriptions for many secret and vault achievements.
+
+# Reporting Bugs
+
+If you find any bugs, please open an issue on [github](https://github.com/TheRisingLegend/achievements-reimagined) or message me on discord @kosmos6621.
+
+# Previews
+
+<img src="preview1.png" width="350" alt="Achievements Reimagined preview1" />
+
+<img src="preview2.png" width="350" alt="Achievements Reimagined preview2" />

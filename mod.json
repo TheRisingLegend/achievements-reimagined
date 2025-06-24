@@ -10,5 +10,33 @@
 	"name": "Achievements Reimagined",
 	"version": "v1.0.0",
 	"developer": "TheRisingLegend",
-	"description": "Completely remakes the achievements menu!"
+	"description": "Completely remakes the achievements menu!",
+	"links": {
+		"source": "https://github.com/TheRisingLegend/achievements-reimagined"
+	},
+	"resources": {
+		"sprites": [
+			"preview1.png",
+			"preview2.png"
+		]
+	},
+	"tags": [
+		"enhancement",
+		"interface",
+		"offline"
+	],
+	"settings": {
+        "use-player-colors": {
+            "name": "Use Player Colors",
+            "description": "Use your player colors for progress bars and icons.",
+            "type": "bool",
+            "default": true
+        },
+		"use-better-descriptions": {
+			"name": "Use Better Descriptions",
+			"description": "Use better descriptions for how to complete achievements.",
+			"type": "bool",
+			"default": true
+		}
+	}
 }
