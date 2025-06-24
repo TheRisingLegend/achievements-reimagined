@@ -5,7 +5,7 @@
 using namespace geode::prelude;
 
 void AchievementCategoryPopup::createTitle() {
-    CCLabelBMFont* unlockTitle = CCLabelBMFont::create(m_category->name.c_str(), "goldFont-uhd.fnt");
+    CCLabelBMFont* unlockTitle = CCLabelBMFont::create(m_category->name.c_str(), "goldFont.fnt");
     unlockTitle->setID("page-title");
     unlockTitle->setPosition({m_mainLayer->getContentWidth() / 2, 260});
     unlockTitle->setScale(1.0f);
@@ -17,17 +17,17 @@ void AchievementCategoryPopup::addProgressText(int percent, int statValue, int g
     CCLabelBMFont* numCompleteLabel = nullptr;
 
     if (percent < 100) {
-        percentLabel = CCLabelBMFont::create(("(" + std::to_string(percent) + "%)").c_str(), "bigFont-uhd.fnt");
+        percentLabel = CCLabelBMFont::create(("(" + std::to_string(percent) + "%)").c_str(), "bigFont.fnt");
         percentLabel->setScale(0.58f);
 
-        numCompleteLabel = CCLabelBMFont::create(formatWithCommas(statValue).c_str(), "bigFont-uhd.fnt");
+        numCompleteLabel = CCLabelBMFont::create(formatWithCommas(statValue).c_str(), "bigFont.fnt");
         numCompleteLabel->setScale(0.39f);
         numCompleteLabel->setPosition({-2, -0.25f});
     } else {
-        percentLabel = CCLabelBMFont::create(("(" + std::to_string(percent) + "%)").c_str(), "goldFont-uhd.fnt");
+        percentLabel = CCLabelBMFont::create(("(" + std::to_string(percent) + "%)").c_str(), "goldFont.fnt");
         percentLabel->setScale(0.75f);
 
-        numCompleteLabel = CCLabelBMFont::create(formatWithCommas(statValue).c_str(), "goldFont-uhd.fnt");
+        numCompleteLabel = CCLabelBMFont::create(formatWithCommas(statValue).c_str(), "goldFont.fnt");
         numCompleteLabel->setScale(0.5f);
         numCompleteLabel->setPosition({-2, 0});
     }
@@ -38,7 +38,7 @@ void AchievementCategoryPopup::addProgressText(int percent, int statValue, int g
     m_mainLayer->addChild(percentLabel);
 
     std::string goalText = formatWithCommas(goalValue);
-    auto goalLabel = CCLabelBMFont::create(("/" + goalText).c_str(), "goldFont-uhd.fnt");
+    auto goalLabel = CCLabelBMFont::create(("/" + goalText).c_str(), "goldFont.fnt");
     goalLabel->setScale(0.5f);
     goalLabel->setAnchorPoint({0, 0.5f});
     goalLabel->setPosition({-3, 0});

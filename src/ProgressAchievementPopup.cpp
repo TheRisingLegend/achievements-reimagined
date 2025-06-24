@@ -172,7 +172,7 @@ CCNode* ProgressAchievementPopup::createPage(int pageNum) {
         lock->setZOrder(1);
 
         // Create the text that shows how much is needed to unlock
-        CCLabelBMFont* unlockValue = CCLabelBMFont::create(formatWithCommas(currAchievement->unlockValue).c_str(), "bigFont-uhd.fnt");
+        CCLabelBMFont* unlockValue = CCLabelBMFont::create(formatWithCommas(currAchievement->unlockValue).c_str(), "bigFont.fnt");
         unlockValue->setID("unlock-text-" + std::to_string(i));
         unlockValue->setScale(.25f);
 
