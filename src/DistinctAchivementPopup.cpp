@@ -102,13 +102,13 @@ CCNode* DistinctAchievementPopup::createPage(int pageNum) {
         tile->addChild(bg);
 
         /* Lock */
-        bool locked = !achievementManager->isAchievementEarned(currAchievement->id.c_str());
+        bool earned = achievementManager->isAchievementEarned(currAchievement->id.c_str());
         CCSprite* lock = CCSprite::createWithSpriteFrameName("GJ_lock_001.png");
         lock->setID("lock");
         lock->setZOrder(1);
 
         /* Unlock description */
-        SimpleTextArea* desc = SimpleTextArea::create(locked ? currAchievement->unachievedDescription : currAchievement->achievedDescription, "bigFont.fnt", 0.2f, 70);
+        SimpleTextArea* desc = SimpleTextArea::create(earned ? currAchievement->unachievedDescription : currAchievement->achievedDescription, "bigFont.fnt", 0.2f, 70);
         desc->setAlignment(kCCTextAlignmentCenter);
         desc->setWrappingMode(WrappingMode::SPACE_WRAP);
         desc->setAnchorPoint({0.5f, 1});
@@ -127,80 +127,51 @@ CCNode* DistinctAchievementPopup::createPage(int pageNum) {
         }
 
         /* Player sprite */
-        CCMenuItemSpriteExtra* unlockButton = nullptr;
-        GJItemIcon* unlockItem = nullptr;
+        GJItemIcon* unlockItem;
 
-        std::vector<UnlockType> playerUnlockTypes = {UnlockType::Cube, UnlockType::Ship, UnlockType::Ball, UnlockType::Bird, UnlockType::Dart, UnlockType::Robot, UnlockType::Spider, UnlockType::Swing, UnlockType::Jetpack};
-        if (std::find(playerUnlockTypes.begin(), playerUnlockTypes.end(), currAchievement->unlockType) != playerUnlockTypes.end()) {
-            SimplePlayer* iconSprite = SimplePlayer::create(1);
-            iconSprite->setID("icon");
-            iconSprite->updatePlayerFrame(currAchievement->unlockID, gameManager->unlockTypeToIconType(static_cast<int>(currAchievement->unlockType)));
-
-            if (locked) {
-                iconSprite->setColors(ccc3(30, 30, 30), ccc3(80, 80, 80));
-                iconSprite->disableGlowOutline();
-                iconSprite->addChild(lock);
-            } else if (usePlayerColors) {
-                iconSprite->setColors(gameManager->colorForIdx(gameManager->getPlayerColor()), gameManager->colorForIdx(gameManager->getPlayerColor2()));
-                if (gameManager->m_playerGlow) {
-                    iconSprite->setGlowOutline(gameManager->colorForIdx(gameManager->getPlayerGlowColor()));
-                }
-            } else {
-                iconSprite->setColors(ccc3(190, 190, 190), ccc3(245, 245, 245));
-                iconSprite->disableGlowOutline();
-            }
-
-            unlockButton = CCMenuItemSpriteExtra::create(
-                iconSprite,
-                this,
-                menu_selector(DistinctAchievementPopup::onIcon));
-
-            unlockButton->setContentSize({iconSprite->m_firstLayer->getContentWidth(), iconSprite->m_firstLayer->getContentHeight()});
-            auto innerSpr = static_cast<cocos2d::CCSprite*>(unlockButton->getNormalImage());
-            innerSpr->setPosition({iconSprite->m_firstLayer->getContentWidth() / 2.f, iconSprite->m_firstLayer->getContentHeight() / 2.f});
-
-        } else if (currAchievement->unlockType == UnlockType::Col1 || currAchievement->unlockType == UnlockType::Col2) {
-            ColorChannelSprite* colorSprite = ColorChannelSprite::create();
-            colorSprite->setID("color");
-            colorSprite->setColor(gameManager->colorForIdx(currAchievement->unlockID));
-
-            if (locked) {
-                lock->setPosition({17.75f, 18.25f});
-                colorSprite->addChild(lock);
-            }
-
-            unlockButton = CCMenuItemSpriteExtra::create(
-                colorSprite,
-                this,
-                menu_selector(DistinctAchievementPopup::onIcon));
-        } else if (currAchievement->unlockID == -1) {  // coin
+        if (currAchievement->unlockID == -1) {  // coin
             CCSprite* coinSprite = CCSprite::createWithSpriteFrameName("secretCoin_01_001.png");
             coinSprite->setID("coin");
             coinSprite->setScale(0.7f);
             coinSprite->setPosition({tile->getContentWidth() / 2, tile->getContentHeight() / 2 + 15});
 
-            if (locked) {
+            if (earned) {
                 lock->setPosition({20, 20});
                 coinSprite->addChild(lock);
             }
 
             tile->addChild(coinSprite);
             continue;
-        } else {
-            GJItemIcon* itemSprite = GJItemIcon::createBrowserItem(currAchievement->unlockType, currAchievement->unlockID);
+        } else if (earned) {
+            std::vector<UnlockType> playerUnlockTypes = {UnlockType::Cube, UnlockType::Ship, UnlockType::Ball, UnlockType::Bird, UnlockType::Dart, UnlockType::Robot, UnlockType::Spider, UnlockType::Swing, UnlockType::Jetpack};
+            bool isIcon = std::find(playerUnlockTypes.begin(), playerUnlockTypes.end(), currAchievement->unlockType) != playerUnlockTypes.end();
 
-            itemSprite->setID("item");
+            if (usePlayerColors) {
+                unlockItem = GJItemIcon::create(currAchievement->unlockType, currAchievement->unlockID, gameManager->colorForIdx(gameManager->getPlayerColor()), gameManager->colorForIdx(gameManager->getPlayerColor2()), isIcon, false, false, gameManager->colorForIdx(gameManager->getPlayerGlowColor()));  // p4: is icon?, p5: idk, p6: hide color number? ----- Not sure how to turn on glow, so doing that separately below
 
-            if (locked) {
-                lock->setPosition({15, 15});
-                itemSprite->addChild(lock);
+                if (gameManager->m_playerGlow) {
+                    CCObject* child;
+                    CCARRAY_FOREACH(unlockItem->getChildren(), child) {
+                        if (auto spr = typeinfo_cast<SimplePlayer*>(child)) {
+                            spr->setGlowOutline(gameManager->colorForIdx(gameManager->getPlayerGlowColor()));
+                        }
+                    }
+                }
+            } else {
+                unlockItem = GJItemIcon::create(currAchievement->unlockType, currAchievement->unlockID, {175, 175, 175}, {255, 255, 255}, isIcon, false, false, {255, 255, 255});
             }
+        } else {
+            unlockItem = GJItemIcon::createBrowserItem(currAchievement->unlockType, currAchievement->unlockID);
 
-            unlockButton = CCMenuItemSpriteExtra::create(
-                itemSprite,
-                this,
-                menu_selector(DistinctAchievementPopup::onIcon));
+            lock->setPosition({unlockItem->getContentWidth() / 2.f, unlockItem->getContentHeight() / 2.f});
+            unlockItem->addChild(lock);
         }
+        unlockItem->setID("item-" + std::to_string(i));
+
+        CCMenuItemSpriteExtra* unlockButton = CCMenuItemSpriteExtra::create(
+            unlockItem,
+            this,
+            menu_selector(DistinctAchievementPopup::onIcon));
 
         // This is for the callback function
         IconCallbackData* data = new IconCallbackData(currAchievement->unlockType, currAchievement->unlockID);
