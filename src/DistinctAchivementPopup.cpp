@@ -103,7 +103,7 @@ CCNode* DistinctAchievementPopup::createPage(int pageNum) {
 
         /* Lock */
         bool locked = !achievementManager->isAchievementEarned(currAchievement->id.c_str());
-        CCSprite* lock = CCSprite::createWithSpriteFrameName("GJ_lockGray_001.png");
+        CCSprite* lock = CCSprite::createWithSpriteFrameName("GJ_lock_001.png");
         lock->setID("lock");
         lock->setZOrder(1);
 
@@ -116,7 +116,17 @@ CCNode* DistinctAchievementPopup::createPage(int pageNum) {
         desc->setPosition({tile->getContentWidth() / 2, 40});
         tile->addChild(desc);
 
-        /* Player Sprite */
+        /* Completion checkmark */
+        if (!Mod::get()->getSettingValue<bool>("hide-achievement-checkmarks")) {
+            CCSprite* checkmark = CCSprite::createWithSpriteFrameName("GJ_completesIcon_001.png");
+            checkmark->setID("checkmark");
+            checkmark->setPosition({bg->getContentWidth() - 10.f, bg->getContentHeight() - 10.f});
+            checkmark->setZOrder(1);
+            checkmark->setVisible(achievementManager->isAchievementEarned(currAchievement->id.c_str()));
+            bg->addChild(checkmark);
+        }
+
+        /* Player sprite */
         CCMenuItemSpriteExtra* unlockButton = nullptr;
         GJItemIcon* unlockItem = nullptr;
 

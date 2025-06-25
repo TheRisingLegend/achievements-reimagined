@@ -169,7 +169,7 @@ CCNode* ProgressAchievementPopup::createPage(int pageNum) {
 
         // Create the lock
         bool locked = !achievementManager->isAchievementEarned(currAchievement->id.c_str());
-        CCSprite* lock = CCSprite::createWithSpriteFrameName("GJ_lockGray_001.png");
+        CCSprite* lock = CCSprite::createWithSpriteFrameName("GJ_lock_001.png");
         lock->setID("lock-" + std::to_string(i));
         lock->setZOrder(1);
 

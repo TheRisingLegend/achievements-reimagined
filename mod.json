@@ -36,7 +36,20 @@
 			"name": "Use Better Descriptions",
 			"description": "Use better descriptions for how to complete achievements.",
 			"type": "bool",
-			"default": true
+			"default": true,
+			"requires-restart": true
+		},
+		"hide-achievement-checkmarks": {
+			"name": "Hide Achievement Completion Checkmarks",
+			"description": "Hide the checkmarks that show if you have completed an achievement.",
+			"type": "bool",
+			"default": false
+		},
+		"hide-category-checkmarks": {
+			"name": "Hide Category Completion Checkmarks",
+			"description": "Hide the checkmarks that show if you have completed a category.",
+			"type": "bool",
+			"default": false
 		}
 	}
 }

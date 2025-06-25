@@ -48,10 +48,6 @@ bool AchievementMenu::setup() {
 
     setTitle("Achievements", "goldFont.fnt", 1.0f);
 
-    createCategoryMenu();
-
-    addNavigation();
-
     addCornerSprites();
 
     CCArray* array = m_achievementManager->m_allAchievements;
@@ -66,7 +62,7 @@ bool AchievementMenu::setup() {
         ach->title = std::string(dict->valueForKey("title")->getCString());
         ach->id = std::string(dict->valueForKey("identifier")->getCString());
 
-        if (Mod::get()->getSetting("use-better-descriptions") && betterDescriptions.contains(ach->id)) {
+        if (Mod::get()->getSettingValue<bool>("use-better-descriptions") && betterDescriptions.contains(ach->id)) {
             ach->unachievedDescription = std::get<0>(betterDescriptions[ach->id]);
             ach->achievedDescription = std::get<1>(betterDescriptions[ach->id]);
 
@@ -97,6 +93,10 @@ bool AchievementMenu::setup() {
 
         category->achievements.push_back(ach);
     }
+
+    createCategoryMenu();
+
+    addNavigation();
 
     return true;
 }
@@ -150,8 +150,28 @@ void AchievementMenu::addCategoryButtons(CCMenu* menuPage, std::string pageTitle
     for (int i = 0; i < m_achievementCategories.size(); i++) {
         if (m_achievementCategories[i].page != pageTitle) continue;
 
-        auto button = CCMenuItemSpriteExtra::create(
-            ButtonSprite::create(m_achievementCategories[i].formattedName.c_str(), 80.f, true, "bigFont.fnt", "GJ_button_01.png", 40.f, 0.5f),
+        ButtonSprite* buttonSprite = ButtonSprite::create(m_achievementCategories[i].formattedName.c_str(), 90.f, true, "bigFont.fnt", "GJ_button_01.png", 40.f, 0.4f);
+
+        if (!Mod::get()->getSettingValue<bool>("hide-category-checkmarks")) {
+            CCSprite* checkmark = CCSprite::createWithSpriteFrameName("GJ_completesIcon_001.png");
+            checkmark->setID("checkmark");
+            checkmark->setPosition({buttonSprite->getContentWidth() - 5.f, buttonSprite->getContentHeight() - 5.f});
+            checkmark->setZOrder(1);
+            buttonSprite->addChild(checkmark);
+
+            bool isCategoryCompleted = true;
+            for (const Achievement* ach : m_achievementCategories[i].achievements) {
+                log::debug("{}: {}", ach->id, achievementManager->isAchievementEarned(ach->id.c_str()));
+                if (!achievementManager->isAchievementEarned(ach->id.c_str())) {
+                    isCategoryCompleted = false;
+                    break;
+                }
+            }
+            checkmark->setVisible(isCategoryCompleted);
+        }
+
+        CCMenuItemSpriteExtra* button = CCMenuItemSpriteExtra::create(
+            buttonSprite,
             this,
             menu_selector(AchievementMenu::onCategoryButton));
 
