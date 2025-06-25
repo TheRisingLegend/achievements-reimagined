@@ -130,13 +130,13 @@ CCNode* DistinctAchievementPopup::createPage(int pageNum) {
         GJItemIcon* unlockItem;
 
         if (currAchievement->unlockID == -1) {  // coin
-            CCSprite* coinSprite = CCSprite::createWithSpriteFrameName("secretCoin_01_001.png");
+            CCSprite* coinSprite = CCSprite::createWithSpriteFrameName("secretCoinUI_001.png");
             coinSprite->setID("coin");
             coinSprite->setScale(0.7f);
             coinSprite->setPosition({tile->getContentWidth() / 2, tile->getContentHeight() / 2 + 15});
 
-            if (earned) {
-                lock->setPosition({20, 20});
+            if (!earned) {
+                lock->setPosition({coinSprite->getContentWidth() / 2.f, coinSprite->getContentHeight() / 2.f});
                 coinSprite->addChild(lock);
             }
 

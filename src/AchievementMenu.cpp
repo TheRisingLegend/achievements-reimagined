@@ -150,7 +150,7 @@ void AchievementMenu::addCategoryButtons(CCMenu* menuPage, std::string pageTitle
     for (int i = 0; i < m_achievementCategories.size(); i++) {
         if (m_achievementCategories[i].page != pageTitle) continue;
 
-        ButtonSprite* buttonSprite = ButtonSprite::create(m_achievementCategories[i].formattedName.c_str(), 90.f, true, "bigFont.fnt", "GJ_button_01.png", 40.f, 0.4f);
+        ButtonSprite* buttonSprite = ButtonSprite::create(m_achievementCategories[i].formattedName.c_str(), 90.f, true, "bigFont.fnt", "GJ_button_01.png", 40.f, 0.5f);
 
         if (!Mod::get()->getSettingValue<bool>("hide-category-checkmarks")) {
             CCSprite* checkmark = CCSprite::createWithSpriteFrameName("GJ_completesIcon_001.png");

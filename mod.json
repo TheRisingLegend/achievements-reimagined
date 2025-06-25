@@ -8,7 +8,7 @@
 	},
 	"id": "therisinglegend.achievements_reimagined",
 	"name": "Achievements Reimagined",
-	"version": "v1.0.0",
+	"version": "v1.1.0",
 	"developer": "TheRisingLegend",
 	"description": "Completely remakes the achievements menu!",
 	"links": {
@@ -25,6 +25,12 @@
 		"interface",
 		"offline"
 	],
+	"incompatibilities": {
+		"limegradient.betterachievements": {
+			"version": ">=1.0.0",
+			"importance": "breaking"
+		}
+	},
 	"settings": {
         "use-player-colors": {
             "name": "Use Player Colors",
