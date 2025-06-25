@@ -34,6 +34,8 @@ bool ProgressAchievementPopup::setup(AchievementMenu* achievementMenu, Category*
 
     addProgressText(percentComplete, m_statValue, m_category->achievements.back()->unlockValue);
 
+    addCornerSprites();
+
     // create pages
     m_maxIconsPerPage = 20;
     m_numPages = (m_numAchievements + m_maxIconsPerPage - 1) / m_maxIconsPerPage;

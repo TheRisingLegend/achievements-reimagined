@@ -10,8 +10,10 @@ class AchievementCategoryPopup : public geode::Popup<AchievementMenu*, Category*
    public:
     void createTitle();
     void addProgressText(int percent, int statValue, int goalValue);
-    virtual cocos2d::CCNode* createPage(int pageNum) = 0;
+    void addCornerSprites();
     void addNavigation();
+
+    virtual cocos2d::CCNode* createPage(int pageNum) = 0;
 
     void onIcon(CCObject* sender);
     void onNavButton(CCObject* sender);

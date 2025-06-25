@@ -4,37 +4,6 @@
 
 using namespace geode::prelude;
 
-std::vector<Category> achievementCategories = {
-    {"Main Levels", "Main Levels", "distinct", {"level##a", "level##b", "demoncoin##", "special##"}},
-    {"Tower Levels", "Tower Levels", "distinct", {"tower##", "tower##Coin"}},
-    {"User Levels", "User Levels", "progress", {"custom##"}, "4"},
-    {"Meltdown", "Meltdown", "distinct", {"mdlevel##b", "mdcoin##", "mdrate"}},
-    {"World", "World", "distinct", {"world"}},
-    {"Subzero", "Subzero", "distinct", {"subzero"}},
-    {"Stars", "Stars", "progress", {"stars##"}, "6"},
-    {"Moons", "Moons", "progress", {"moons##"}, "28"},
-    {"Diamonds", "Diamonds", "progress", {"diamonds##"}, "13"},
-    {"Secret Coins", "Secret Coins", "progress", {"coins##"}, "8"},
-    {"User Coins", "User Coins", "progress", {"usercoins##"}, "12"},
-    {"Creator", "Creator", "distinct", {"creator##", "submit"}},
-    {"Demons", "Demons", "progress", {"demon##"}, "5"},
-    {"Insanes", "Insanes", "progress", {"insane##"}, "42"},
-    {"Jumps", "Jumps", "progress", {"jump##"}, "1"},
-    {"Attempts", "Attempts", "progress", {"attempt##"}, "2"},
-    {"Daily Levels", "Daily Levels", "progress", {"daily##"}, "15"},
-    {"Map Packs", "Map Packs", "progress", {"mappacks##"}, "7"},
-    {"Gauntlets", "Gauntlets", "progress", {"gauntlets##"}, "40"},
-    {"Lists", "Lists", "progress", {"lists##"}, "41"},
-    {"Liked/Disliked Levels", "Liked/Disliked\nLevels", "progress", {"like", "like##", "like##b"}, "10"},
-    {"Rated Levels", "Rated Levels", "progress", {"rateDiff", "rateDiff##", "rateDiff##b"}, "11"},
-    {"Followed Creators", "Followed\nCreators", "progress", {"followCreator", "followCreator##"}},
-    {"Friends", "Friends", "distinct", {"friends##"}},
-    {"Players Destroyed", "Players\nDestroyed", "progress", {}, "9"},
-    {"Secret", "Secret", "distinct", {"secret##", "secret##b"}},
-    {"Vaults", "Vaults", "distinct", {"v#"}},
-    {"Misc", "Misc", "distinct", {"rate", "moreGames", "facebook", "youtube", "twitter"}},
-    {"Steam Exclusive", "Steam\nExclusive", "distinct", {"steam##"}}};
-
 std::map<std::string, std::tuple<std::string, std::string>> betterDescriptions = {
     // Secret
     {"geometry.ach.secret04", {"Find the hidden coin on the Coming Soon screen", "Found the hidden coin on the Coming Soon screen"}},
@@ -82,55 +51,10 @@ std::map<std::string, std::tuple<std::string, std::string>> betterDescriptions =
 
 };
 
-bool achievementsLoaded = false;
-
 AchievementManager* achievementManager = AchievementManager::sharedState();
 GameManager* gameManager = GameManager::sharedState();
 GameStatsManager* gameStatsManager = GameStatsManager::sharedState();
 GameLevelManager* gameLevelManager = GameLevelManager::sharedState();
-
-Category* getCategory(const std::string& id, const std::string& achievedDescription) {
-    std::string sub;
-    std::stringstream ss(id);
-    std::getline(ss, sub, '.');
-    std::getline(ss, sub, '.');
-    std::getline(ss, sub, '.');
-
-    std::string generic;
-    for (auto it = sub.begin(); it < sub.end(); it++) {
-        auto c = *it;
-        if (c >= '0' && c <= '9') {
-            generic += "#";
-        } else {
-            generic += c;
-        }
-    }
-
-    // Currently don't support path or shards achievements
-    // Could just open their vanilla menus when the category is clicked or
-    // build own menus for each to match the style of the mod
-    if (generic == "path##" || generic.find("shard") != std::string::npos) {
-        return nullptr;
-    }
-
-    // 'Players destroyed' achievements are grouped in with the secret achievements, so take those out based on their unlock description
-    // Additionally, some 'Vault' achievements are grouped in with the secret achievements
-    for (Category& cat : achievementCategories) {
-        for (std::string id : cat.identifiers) {
-            if (generic == id) {
-                if (cat.name == "Secret" && achievedDescription.find("Destroyed") != std::string::npos)
-                    return &achievementCategories[24];  // Players Destroyed
-
-                if (cat.name == "Secret" && achievedDescription.find("Vault") != std::string::npos)
-                    return &achievementCategories[26];  // Vaults
-
-                return &cat;
-            }
-        }
-    }
-
-    return nullptr;
-}
 
 std::string formatWithCommas(int number) {
     std::string s = std::to_string(number);

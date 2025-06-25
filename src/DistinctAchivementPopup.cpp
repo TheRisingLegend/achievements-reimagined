@@ -47,6 +47,8 @@ bool DistinctAchievementPopup::setup(AchievementMenu* achievementMenu, Category*
 
     addProgressText(percentComplete, numAchievementsComplete, m_numAchievements);
 
+    addCornerSprites();
+
     // create pages
     m_maxIconsPerPage = 10;
     m_numPages = (m_numAchievements + m_maxIconsPerPage - 1) / m_maxIconsPerPage;

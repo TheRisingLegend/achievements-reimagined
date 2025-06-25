@@ -8,13 +8,51 @@ using namespace geode::prelude;
 bool AchievementMenu::setup() {
     m_achievementManager = AchievementManager::sharedState();
 
+    m_achievementCategories = {
+        // Levels
+        {"Main Levels", "Main Levels", "Levels", "distinct", {"level##a", "level##b", "demoncoin##", "special##"}},
+        {"Tower Levels", "Tower Levels", "Levels", "distinct", {"tower##", "tower##Coin"}},
+        {"User Levels", "User Levels", "Levels", "progress", {"custom##"}, "4"},
+        {"Meltdown", "Meltdown", "Levels", "distinct", {"mdlevel##b", "mdcoin##", "mdrate"}},
+        {"World", "World", "Levels", "distinct", {"world"}},
+        {"Subzero", "Subzero", "Levels", "distinct", {"subzero"}},
+        {"Demons", "Demons", "Levels", "progress", {"demon##"}, "5"},
+        {"Insanes", "Insanes", "Levels", "progress", {"insane##"}, "42"},
+        {"Daily Levels", "Daily Levels", "Levels", "progress", {"daily##"}, "15"},
+        {"Map Packs", "Map Packs", "Levels", "progress", {"mappacks##"}, "7"},
+        {"Gauntlets", "Gauntlets", "Levels", "progress", {"gauntlets##"}, "40"},
+        {"Lists", "Lists", "Levels", "progress", {"lists##"}, "41"},
+
+        // Stats
+        {"Stars", "Stars", "Stats", "progress", {"stars##"}, "6"},
+        {"Moons", "Moons", "Stats", "progress", {"moons##"}, "28"},
+        {"Diamonds", "Diamonds", "Stats", "progress", {"diamonds##"}, "13"},
+        {"Secret Coins", "Secret Coins", "Stats", "progress", {"coins##"}, "8"},
+        {"User Coins", "User Coins", "Stats", "progress", {"usercoins##"}, "12"},
+        {"Jumps", "Jumps", "Stats", "progress", {"jump##"}, "1"},
+        {"Attempts", "Attempts", "Stats", "progress", {"attempt##"}, "2"},
+
+        // Social
+        {"Liked/Disliked Levels", "Liked/Disliked\nLevels", "Social", "progress", {"like", "like##", "like##b"}, "10"},
+        {"Rated Levels", "Rated Levels", "Social", "progress", {"rateDiff", "rateDiff##", "rateDiff##b"}, "11"},
+        {"Followed Creators", "Followed\nCreators", "Social", "progress", {"followCreator", "followCreator##"}},
+        {"Friends", "Friends", "Social", "distinct", {"friends##"}},
+
+        // Other
+        {"Creator", "Creator", "Other", "distinct", {"creator##", "submit"}},
+        {"Vaults", "Vaults", "Other", "distinct", {"v#"}},
+        {"Players Destroyed", "Players\nDestroyed", "Other", "progress", {}, "9"},
+        {"Secret", "Secret", "Other", "distinct", {"secret##", "secret##b"}},
+        {"Misc", "Misc", "Other", "distinct", {"rate", "moreGames", "facebook", "youtube", "twitter"}},
+        {"Steam Exclusive", "Steam\nExclusive", "Other", "distinct", {"steam##"}}};
+
     setTitle("Achievements", "goldFont.fnt", 1.0f);
 
     createCategoryMenu();
 
-    // Assign all achievements to a category
-    if (achievementsLoaded)
-        return true;
+    addNavigation();
+
+    addCornerSprites();
 
     CCArray* array = m_achievementManager->m_allAchievements;
     for (int i = 0; i < array->count(); i++) {
@@ -39,13 +77,13 @@ bool AchievementMenu::setup() {
             ach->unachievedDescription = std::string(dict->valueForKey("unachievedDescription")->getCString());
         }
 
-        Category* category = getCategory(ach->id, ach->achievedDescription);
+        Category* category = getCategoryForAchievement(ach->id, ach->achievedDescription);
         if (category == nullptr) {
             log::debug("Category not found for ID: {}", ach->id);
             continue;
         }
 
-        ach->unlockValue = category->type == "progress" ? extractValue(ach->achievedDescription) : -1;
+        ach->unlockValue = category->displayType == "progress" ? extractValue(ach->achievedDescription) : -1;
 
         std::string icon = std::string(dict->valueForKey("icon")->getCString());
         size_t pos = icon.find('_');
@@ -59,8 +97,6 @@ bool AchievementMenu::setup() {
 
         category->achievements.push_back(ach);
     }
-
-    achievementsLoaded = true;
 
     return true;
 }
@@ -76,28 +112,73 @@ AchievementMenu* AchievementMenu::create() {
 }
 
 void AchievementMenu::createCategoryMenu() {
-    for (int i = 0; i * m_maxCategoriesPerPage < achievementCategories.size(); i++) {
-        auto menuPage = CCMenu::create();
-        menuPage->setID("categories-menu");
-        menuPage->setContentSize({m_mainLayer->getContentWidth(), m_mainLayer->getContentHeight() - 70.f});
-        menuPage->setPosition({m_mainLayer->getContentWidth() / 2, m_mainLayer->getContentHeight() / 2 - 3.f});
-        menuPage->setLayout(RowLayout::create()
-                                ->setGap(14.f)
-                                ->setAxisAlignment(AxisAlignment::Center)
-                                ->setCrossAxisAlignment(AxisAlignment::Even)
-                                ->setGrowCrossAxis(true));
+    std::vector<std::string> pageTitles = {"Levels", "Stats", "Social", "Other"};
+    for (int i = 0; i < pageTitles.size(); i++) {
+        auto menuPage = CCNode::create();
+        menuPage->setID("page-" + std::to_string(i));
         menuPage->setTag(i);
+        menuPage->setContentSize({m_mainLayer->getContentWidth(), m_mainLayer->getContentHeight() - 70.f});
+        menuPage->setPosition({0, 0});
         menuPage->setVisible(i == m_categoryPage);
-
-        addCategoryButtons(menuPage, i);
-
-        menuPage->updateLayout();
-
         m_mainLayer->addChild(menuPage);
+
+        auto subTitle = CCLabelBMFont::create(pageTitles[i].c_str(), "bigFont.fnt");
+        subTitle->setID("page-subtitle");
+        subTitle->setScale(0.6f);
+        subTitle->setPosition({menuPage->getContentWidth() / 2, 235});
+        menuPage->addChild(subTitle);
+
+        auto buttonMenu = CCMenu::create();
+        buttonMenu->setID("categories-menu");
+        buttonMenu->setContentSize({m_mainLayer->getContentWidth() - 100, m_mainLayer->getContentHeight() - 70.f});
+        buttonMenu->setPosition({m_mainLayer->getContentWidth() / 2, m_mainLayer->getContentHeight() / 2 - 13.f});
+        buttonMenu->setLayout(RowLayout::create()
+                                  ->setGap(12.f)
+                                  ->setAxisAlignment(AxisAlignment::Center)
+                                  ->setCrossAxisAlignment(AxisAlignment::Even)
+                                  ->setGrowCrossAxis(true));
+        menuPage->addChild(buttonMenu);
+
+        addCategoryButtons(buttonMenu, pageTitles[i]);
+        buttonMenu->updateLayout();
+
         m_categoriesMenu.push_back(menuPage);
     }
+}
 
-    addNavigation();
+void AchievementMenu::addCategoryButtons(CCMenu* menuPage, std::string pageTitle) {
+    for (int i = 0; i < m_achievementCategories.size(); i++) {
+        if (m_achievementCategories[i].page != pageTitle) continue;
+
+        auto button = CCMenuItemSpriteExtra::create(
+            ButtonSprite::create(m_achievementCategories[i].formattedName.c_str(), 80.f, true, "bigFont.fnt", "GJ_button_01.png", 40.f, 0.5f),
+            this,
+            menu_selector(AchievementMenu::onCategoryButton));
+
+        button->setID(m_achievementCategories[i].name);
+        button->setTag(i);
+
+        menuPage->addChild(button);
+    }
+}
+
+void AchievementMenu::onCategoryButton(CCObject* sender) {
+    CCMenuItemSpriteExtra* categoryButton = static_cast<CCMenuItemSpriteExtra*>(sender);
+
+    int index = categoryButton->getTag();
+    Category* category = &m_achievementCategories[index];
+
+    if (category->displayType == "progress") {
+        ProgressAchievementPopup* popup = ProgressAchievementPopup::create(this, category);
+        popup->m_noElasticity = GameManager::get()->getGameVariable("0168");  // For fast menu setting
+        popup->show();
+    } else if (category->displayType == "distinct") {
+        DistinctAchievementPopup* popup = DistinctAchievementPopup::create(this, category);
+        popup->m_noElasticity = GameManager::get()->getGameVariable("0168");  // For fast menu setting
+        popup->show();
+    }
+
+    hideArrows();
 }
 
 void AchievementMenu::addNavigation() {
@@ -216,39 +297,6 @@ void AchievementMenu::showArrows() {
     m_navMenu->getChildByID("right-arrow")->setVisible(m_categoryPage < m_categoriesMenu.size() - 1);
 }
 
-void AchievementMenu::addCategoryButtons(CCMenu* menuPage, int pageNum) {
-    for (int i = m_maxCategoriesPerPage * pageNum; i < achievementCategories.size() && i < m_maxCategoriesPerPage * (pageNum + 1); i++) {
-        auto button = CCMenuItemSpriteExtra::create(
-            ButtonSprite::create(achievementCategories[i].formattedName.c_str(), 90.f, true, "bigFont.fnt", "GJ_button_01.png", 45.f, 1.f),
-            this,
-            menu_selector(AchievementMenu::onCategoryButton));
-
-        button->setID(achievementCategories[i].name);
-        button->setTag(i);
-
-        menuPage->addChild(button);
-    }
-}
-
-void AchievementMenu::onCategoryButton(CCObject* sender) {
-    CCMenuItemSpriteExtra* categoryButton = static_cast<CCMenuItemSpriteExtra*>(sender);
-
-    int index = categoryButton->getTag();
-    Category* category = &achievementCategories[index];
-
-    if (category->type == "progress") {
-        ProgressAchievementPopup* popup = ProgressAchievementPopup::create(this, category);
-        popup->m_noElasticity = GameManager::get()->getGameVariable("0168");  // For fast menu setting
-        popup->show();
-    } else if (category->type == "distinct") {
-        DistinctAchievementPopup* popup = DistinctAchievementPopup::create(this, category);
-        popup->m_noElasticity = GameManager::get()->getGameVariable("0168");  // For fast menu setting
-        popup->show();
-    }
-
-    hideArrows();
-}
-
 UnlockType AchievementMenu::unlockTypeFromString(const std::string& str) {
     if (str == "icon") {
         return UnlockType::Cube;
@@ -282,4 +330,83 @@ UnlockType AchievementMenu::unlockTypeFromString(const std::string& str) {
 
     log::debug("Unknown unlock type: {}", str);
     return UnlockType::GJItem;
+}
+
+Category* AchievementMenu::getCategoryForAchievement(const std::string& id, const std::string& achievedDescription) {
+    std::string sub;
+    std::stringstream ss(id);
+    std::getline(ss, sub, '.');
+    std::getline(ss, sub, '.');
+    std::getline(ss, sub, '.');
+
+    std::string generic;
+    for (auto it = sub.begin(); it < sub.end(); it++) {
+        auto c = *it;
+        if (c >= '0' && c <= '9') {
+            generic += "#";
+        } else {
+            generic += c;
+        }
+    }
+
+    // Currently don't support path or shards achievements
+    // Could just open their vanilla menus when the category is clicked or
+    // build own menus for each to match the style of the mod
+    if (generic == "path##" || generic.find("shard") != std::string::npos) {
+        return nullptr;
+    }
+
+    // 'Players destroyed' achievements are grouped in with the secret achievements, so take those out based on their unlock description
+    // Additionally, some 'Vault' achievements are grouped in with the secret achievements
+    for (Category& cat : m_achievementCategories) {
+        for (std::string id : cat.identifiers) {
+            if (generic == id) {
+                if (cat.name == "Secret" && achievedDescription.find("Destroyed") != std::string::npos)
+                    return &m_achievementCategories[25];  // Players Destroyed
+
+                if (cat.name == "Secret" && achievedDescription.find("Vault") != std::string::npos)
+                    return &m_achievementCategories[24];  // Vaults
+
+                return &cat;
+            }
+        }
+    }
+
+    return nullptr;
+}
+
+void AchievementMenu::addCornerSprites() {
+    CCNode* cornerContainer = CCNode::create();
+    cornerContainer->setID("corners");
+    cornerContainer->setContentSize(m_mainLayer->getContentSize());
+    cornerContainer->setPosition({0.f, 0.f});
+    m_mainLayer->addChild(cornerContainer);
+
+    CCSprite* blCornerSprite = CCSprite::createWithSpriteFrameName("dailyLevelCorner_001.png");
+    blCornerSprite->setID("bottom-left");
+    blCornerSprite->setAnchorPoint({0.f, 0.f});
+    blCornerSprite->setPosition({0.f, 0.f});
+    cornerContainer->addChild(blCornerSprite);
+
+    CCSprite* brCornerSprite = CCSprite::createWithSpriteFrameName("dailyLevelCorner_001.png");
+    brCornerSprite->setID("bottom-right");
+    brCornerSprite->setAnchorPoint({1.f, 0.f});
+    brCornerSprite->setPosition({cornerContainer->getContentWidth(), 0.f});
+    brCornerSprite->setFlipX(true);
+    cornerContainer->addChild(brCornerSprite);
+
+    CCSprite* tlCornerSprite = CCSprite::createWithSpriteFrameName("dailyLevelCorner_001.png");
+    tlCornerSprite->setID("top-left");
+    tlCornerSprite->setAnchorPoint({0.f, 1.f});
+    tlCornerSprite->setPosition({0.f, cornerContainer->getContentHeight()});
+    tlCornerSprite->setFlipY(true);
+    cornerContainer->addChild(tlCornerSprite);
+
+    CCSprite* trCornerSprite = CCSprite::createWithSpriteFrameName("dailyLevelCorner_001.png");
+    trCornerSprite->setID("top-right");
+    trCornerSprite->setAnchorPoint({1.f, 1.f});
+    trCornerSprite->setPosition({cornerContainer->getContentWidth(), cornerContainer->getContentHeight()});
+    trCornerSprite->setFlipX(true);
+    trCornerSprite->setFlipY(true);
+    cornerContainer->addChild(trCornerSprite);
 }

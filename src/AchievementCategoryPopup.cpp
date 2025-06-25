@@ -53,6 +53,42 @@ void AchievementCategoryPopup::addProgressText(int percent, int statValue, int g
     m_mainLayer->addChild(container);
 }
 
+void AchievementCategoryPopup::addCornerSprites() {
+    CCNode* cornerContainer = CCNode::create();
+    cornerContainer->setID("corners");
+    cornerContainer->setContentSize(m_mainLayer->getContentSize());
+    cornerContainer->setPosition({0.f, 0.f});
+    m_mainLayer->addChild(cornerContainer);
+
+    CCSprite* blCornerSprite = CCSprite::createWithSpriteFrameName("dailyLevelCorner_001.png");
+    blCornerSprite->setID("bottom-left");
+    blCornerSprite->setAnchorPoint({0.f, 0.f});
+    blCornerSprite->setPosition({0.f, 0.f});
+    cornerContainer->addChild(blCornerSprite);
+
+    CCSprite* brCornerSprite = CCSprite::createWithSpriteFrameName("dailyLevelCorner_001.png");
+    brCornerSprite->setID("bottom-right");
+    brCornerSprite->setAnchorPoint({1.f, 0.f});
+    brCornerSprite->setPosition({cornerContainer->getContentWidth(), 0.f});
+    brCornerSprite->setFlipX(true);
+    cornerContainer->addChild(brCornerSprite);
+
+    CCSprite* tlCornerSprite = CCSprite::createWithSpriteFrameName("dailyLevelCorner_001.png");
+    tlCornerSprite->setID("top-left");
+    tlCornerSprite->setAnchorPoint({0.f, 1.f});
+    tlCornerSprite->setPosition({0.f, cornerContainer->getContentHeight()});
+    tlCornerSprite->setFlipY(true);
+    cornerContainer->addChild(tlCornerSprite);
+
+    CCSprite* trCornerSprite = CCSprite::createWithSpriteFrameName("dailyLevelCorner_001.png");
+    trCornerSprite->setID("top-right");
+    trCornerSprite->setAnchorPoint({1.f, 1.f});
+    trCornerSprite->setPosition({cornerContainer->getContentWidth(), cornerContainer->getContentHeight()});
+    trCornerSprite->setFlipX(true);
+    trCornerSprite->setFlipY(true);
+    cornerContainer->addChild(trCornerSprite);
+}
+
 void AchievementCategoryPopup::addNavigation() {
     if (m_numPages <= 1) return;
 

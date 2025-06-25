@@ -14,15 +14,15 @@ class AchievementMenu : public geode::Popup<> {
 
     AchievementManager* m_achievementManager;
 
-    std::vector<cocos2d::CCMenu*> m_categoriesMenu;
+    std::vector<cocos2d::CCNode*> m_categoriesMenu;
     cocos2d::CCMenu* m_navMenu;
     cocos2d::CCMenu* m_navButtons;
     int m_categoryPage = 0;  // the current page of the category menu
     int m_maxCategoriesPerPage = 12;
 
-    // std::vector<Achievement*> m_achievements;
-
     void createCategoryMenu();
+    void addCategoryButtons(cocos2d::CCMenu* menuPage, std::string pageTitle);
+    void onCategoryButton(CCObject* sender);
 
     void addNavigation();
     void onCategoryArrow(CCObject* sender);
@@ -30,9 +30,12 @@ class AchievementMenu : public geode::Popup<> {
     void hideArrows();
     void showArrows();
 
-    void addCategoryButtons(cocos2d::CCMenu* menuPage, int pageNum);
-    void onCategoryButton(CCObject* sender);
+    void addCornerSprites();
 
     UnlockType unlockTypeFromString(const std::string& str);
+    Category* getCategoryForAchievement(const std::string& id, const std::string& achievedDescription);
+
+    std::vector<Category> m_achievementCategories;
 };
+
 #endif
