@@ -18,6 +18,7 @@ struct Category {
     std::string formattedName;  // with new lines
     std::string page;           // which page: "Levels", "Stats", "Social", or "Other"
     std::string displayType;    // "distinct" or "progress"
+    std::string logo;
     std::vector<std::string> identifiers;
     std::string statKey;
     std::vector<Achievement*> achievements;

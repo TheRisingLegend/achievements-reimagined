@@ -1,0 +1,21 @@
+#ifndef PATHACHIEVEMENTPOPUP_HPP
+#define PATHACHIEVEMENTPOPUP_HPP
+
+#include <Geode/Geode.hpp>
+
+#include "AchievementCategoryPopup.hpp"
+
+class PathAchievementPopup : public AchievementCategoryPopup {
+   protected:
+    bool setup(AchievementMenu* achievementMenu, Category* category) override;
+
+   public:
+    static PathAchievementPopup* create(AchievementMenu* achievementMenu, Category* category);
+    void addNavigation(int activePage);
+    void onNavButton(CCObject* sender) override;
+    void onArrow(CCObject* sender) override;
+
+    cocos2d::CCNode* createPage(int pageNum);
+};
+
+#endif

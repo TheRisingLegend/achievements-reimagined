@@ -128,7 +128,10 @@ void AchievementCategoryPopup::addNavigation() {
         leftArrowSprite,
         this,
         menu_selector(AchievementCategoryPopup::onArrow));
-    leftArrow->setPosition({-30.f, m_navMenu->getContentHeight() / 2});
+    if (m_mainLayer->getPositionX() - m_mainLayer->getContentWidth() / 2 > 40)
+        leftArrow->setPosition({-30.f, m_navMenu->getContentHeight() / 2});
+    else
+        leftArrow->setPosition({-16.f, m_navMenu->getContentHeight() / 2});
     leftArrow->setTag(0);
     leftArrow->setID("left-arrow");
     m_navMenu->addChild(leftArrow);
@@ -140,7 +143,10 @@ void AchievementCategoryPopup::addNavigation() {
         rightArrowSprite,
         this,
         menu_selector(AchievementCategoryPopup::onArrow));
-    rightArrow->setPosition({m_navMenu->getContentWidth() + 30.f, m_navMenu->getContentHeight() / 2});
+    if (m_mainLayer->getPositionX() - m_mainLayer->getContentWidth() / 2 > 40)
+        rightArrow->setPosition({m_navMenu->getContentWidth() + 30.f, m_navMenu->getContentHeight() / 2});
+    else
+        rightArrow->setPosition({m_navMenu->getContentWidth() + 6.f, m_navMenu->getContentHeight() / 2});
     rightArrow->setTag(1);
     rightArrow->setID("right-arrow");
     m_navMenu->addChild(rightArrow);

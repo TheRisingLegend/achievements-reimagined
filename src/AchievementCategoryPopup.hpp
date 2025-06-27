@@ -16,8 +16,8 @@ class AchievementCategoryPopup : public geode::Popup<AchievementMenu*, Category*
     virtual cocos2d::CCNode* createPage(int pageNum) = 0;
 
     void onIcon(CCObject* sender);
-    void onNavButton(CCObject* sender);
-    void onArrow(CCObject* sender);
+    virtual void onNavButton(CCObject* sender);
+    virtual void onArrow(CCObject* sender);
     void onClose(CCObject* sender) override;
 
     int m_maxIconsPerPage;

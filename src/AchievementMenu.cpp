@@ -1,7 +1,9 @@
 #include "AchievementMenu.hpp"
 
 #include "DistinctAchievementPopup.hpp"
+#include "PathAchievementPopup.hpp"
 #include "ProgressAchievementPopup.hpp"
+#include "ShardAchievementPopup.hpp"
 
 using namespace geode::prelude;
 
@@ -10,41 +12,43 @@ bool AchievementMenu::setup() {
 
     m_achievementCategories = {
         // Levels
-        {"Main Levels", "Main Levels", "Levels", "distinct", {"level##a", "level##b", "demoncoin##", "special##"}},
-        {"Tower Levels", "Tower Levels", "Levels", "distinct", {"tower##", "tower##Coin"}},
-        {"User Levels", "User Levels", "Levels", "progress", {"custom##"}, "4"},
-        {"Meltdown", "Meltdown", "Levels", "distinct", {"mdlevel##b", "mdcoin##", "mdrate"}},
-        {"World", "World", "Levels", "distinct", {"world"}},
-        {"Subzero", "Subzero", "Levels", "distinct", {"subzero"}},
-        {"Demons", "Demons", "Levels", "progress", {"demon##"}, "5"},
-        {"Insanes", "Insanes", "Levels", "progress", {"insane##"}, "42"},
-        {"Daily Levels", "Daily Levels", "Levels", "progress", {"daily##"}, "15"},
-        {"Map Packs", "Map Packs", "Levels", "progress", {"mappacks##"}, "7"},
-        {"Gauntlets", "Gauntlets", "Levels", "progress", {"gauntlets##"}, "40"},
-        {"Lists", "Lists", "Levels", "progress", {"lists##"}, "41"},
+        {"Main Levels", "Main Levels", "Levels", "distinct", "GJ_playBtn_001.png", {"level##a", "level##b", "demoncoin##", "special##"}},
+        {"Tower Levels", "Tower Levels", "Levels", "distinct", "theTower_01_001.png", {"tower##", "tower##Coin"}},
+        {"User Levels", "User Levels", "Levels", "progress", "GJ_creatorBtn_001.png", {"custom##"}, "4"},
+        {"Meltdown", "Meltdown", "Levels", "distinct", "GJ_md_001.png", {"mdlevel##b", "mdcoin##", "mdrate"}},
+        {"World", "World", "Levels", "distinct", "gj_worldLogo_001.png", {"world"}},
+        {"Subzero", "Subzero", "Levels", "distinct", "gj_subzeroLogo_001.png", {"subzero"}},
+        {"Demons", "Demons", "Levels", "progress", "diffIcon_06_btn_001.png", {"demon##"}, "5"},
+        {"Insanes", "Insanes", "Levels", "progress", "diffIcon_05_btn_001.png", {"insane##"}, "42"},
+        {"Daily Levels", "Daily Levels", "Levels", "progress", "gj_dailyCrown_001.png", {"daily##"}, "15"},
+        {"Map Packs", "Map Packs", "Levels", "progress", "GJ_mapPacksBtn_001.png", {"mappacks##"}, "7"},
+        {"Gauntlets", "Gauntlets", "Levels", "progress", "GJ_gauntletsBtn_001.png", {"gauntlets##"}, "40"},
+        {"Lists", "Lists", "Levels", "progress", "topListsLabel_001.png", {"lists##"}, "41"},
 
         // Stats
-        {"Stars", "Stars", "Stats", "progress", {"stars##"}, "6"},
-        {"Moons", "Moons", "Stats", "progress", {"moons##"}, "28"},
-        {"Diamonds", "Diamonds", "Stats", "progress", {"diamonds##"}, "13"},
-        {"Secret Coins", "Secret Coins", "Stats", "progress", {"coins##"}, "8"},
-        {"User Coins", "User Coins", "Stats", "progress", {"usercoins##"}, "12"},
-        {"Jumps", "Jumps", "Stats", "progress", {"jump##"}, "1"},
-        {"Attempts", "Attempts", "Stats", "progress", {"attempt##"}, "2"},
+        {"Stars", "Stars", "Stats", "progress", "GJ_bigStar_noShadow_001.png", {"stars##"}, "6"},
+        {"Moons", "Moons", "Stats", "progress", "GJ_bigMoon_noShadow_001.png", {"moons##"}, "28"},
+        {"Diamonds", "Diamonds", "Stats", "progress", "GJ_bigDiamond_noShadow_001.png", {"diamonds##"}, "13"},
+        {"Secret Coins", "Secret Coins", "Stats", "progress", "secretCoinUI_001.png", {"coins##"}, "8"},
+        {"User Coins", "User Coins", "Stats", "progress", "secretCoinUI2_001.png", {"usercoins##"}, "12"},
+        {"Jumps", "Jumps", "Stats", "progress", "PBtn_Jump_001.png", {"jump##"}, "1"},
+        {"Attempts", "Attempts", "Stats", "progress", "GJ_playBtn2_001.png", {"attempt##"}, "2"},
+        {"Shards", "Shards", "Stats", "shard", "GJ_shardsBtn_001.png", {}},
+        {"Paths", "Paths", "Stats", "path", "GJ_pathsBtn_001.png", {}},
 
         // Social
-        {"Liked/Disliked Levels", "Liked/Disliked\nLevels", "Social", "progress", {"like", "like##", "like##b"}, "10"},
-        {"Rated Levels", "Rated Levels", "Social", "progress", {"rateDiff", "rateDiff##", "rateDiff##b"}, "11"},
-        {"Followed Creators", "Followed\nCreators", "Social", "progress", {"followCreator", "followCreator##"}},
-        {"Friends", "Friends", "Social", "distinct", {"friends##"}},
+        {"Liked/Disliked Levels", "Liked/Disliked\nLevels", "Social", "progress", "GJ_like2Btn_001.png", {"like", "like##", "like##b"}, "10"},
+        {"Rated Levels", "Rated Levels", "Social", "progress", "GJ_starBtn_001.png", {"rateDiff", "rateDiff##", "rateDiff##b"}, "11"},
+        {"Followed Creators", "Followed\nCreators", "Social", "progress", "gj_heartOn_001.png", {"followCreator", "followCreator##"}},
+        {"Friends", "Friends", "Social", "distinct", "GJ_sFriendsIcon_001.png", {"friends##"}},
 
         // Other
-        {"Creator", "Creator", "Other", "distinct", {"creator##", "submit"}},
-        {"Vaults", "Vaults", "Other", "distinct", {"v#"}},
-        {"Players Destroyed", "Players\nDestroyed", "Other", "progress", {}, "9"},
-        {"Secret", "Secret", "Other", "distinct", {"secret##", "secret##b"}},
-        {"Misc", "Misc", "Other", "distinct", {"rate", "moreGames", "facebook", "youtube", "twitter"}},
-        {"Steam Exclusive", "Steam\nExclusive", "Other", "distinct", {"steam##"}}};
+        {"Creator", "Creator", "Other", "distinct", "GJ_hammerIcon_001.png", {"creator##", "submit"}},
+        {"Vaults", "Vaults", "Other", "distinct", "secretDoorBtn2_open_001.png", {"v#"}},
+        {"Players Destroyed", "Players\nDestroyed", "Other", "progress", "playerExplosion_01_001.png", {}, "9"},
+        {"Secret", "Secret", "Other", "distinct", "GJ_lock_open_001.png", {"secret##", "secret##b"}},
+        {"Misc", "Misc", "Other", "distinct", "GJ_plusBtn_001.png", {"rate", "moreGames", "facebook", "youtube", "twitter"}},
+        {"Steam Exclusive", "Steam\nExclusive", "Other", "distinct", "secretCoin_2_b_01_001.png", {"steam##"}}};
 
     setTitle("Achievements", "goldFont.fnt", 1.0f);
 
@@ -79,7 +83,8 @@ bool AchievementMenu::setup() {
             continue;
         }
 
-        ach->unlockValue = category->displayType == "progress" ? extractValue(ach->achievedDescription) : -1;
+        // if(category->displayType == "progress" || category->displayType == "shard")
+        ach->unlockValue = category->displayType == "progress" || category->displayType == "shard" ? extractValue(ach->achievedDescription) : -1;
 
         std::string icon = std::string(dict->valueForKey("icon")->getCString());
         size_t pos = icon.find('_');
@@ -92,6 +97,9 @@ bool AchievementMenu::setup() {
         }
 
         category->achievements.push_back(ach);
+
+        if (category->name == "Shards")
+            log::debug("{}", ach->id);
     }
 
     createCategoryMenu();
@@ -152,6 +160,18 @@ void AchievementMenu::addCategoryButtons(CCMenu* menuPage, std::string pageTitle
 
         ButtonSprite* buttonSprite = ButtonSprite::create(m_achievementCategories[i].formattedName.c_str(), 90.f, true, "bigFont.fnt", "GJ_button_01.png", 40.f, 0.5f);
 
+        // CCSprite* logo = CCSprite::createWithSpriteFrameName(m_achievementCategories[i].logo.c_str());
+        // if (!logo) {
+        //     log::error("Failed to load logo for category: {}", m_achievementCategories[i].name);
+
+        // } else {
+        //     logo->setID("logo");
+        //     logo->setScale(25.f / logo->getContentWidth());
+        //     logo->setPosition({buttonSprite->getContentWidth() / 2, 0});
+        //     logo->setZOrder(1);
+        //     buttonSprite->addChild(logo);
+        // }
+
         if (!Mod::get()->getSettingValue<bool>("hide-category-checkmarks")) {
             CCSprite* checkmark = CCSprite::createWithSpriteFrameName("GJ_completesIcon_001.png");
             checkmark->setID("checkmark");
@@ -161,7 +181,6 @@ void AchievementMenu::addCategoryButtons(CCMenu* menuPage, std::string pageTitle
 
             bool isCategoryCompleted = true;
             for (const Achievement* ach : m_achievementCategories[i].achievements) {
-                log::debug("{}: {}", ach->id, achievementManager->isAchievementEarned(ach->id.c_str()));
                 if (!achievementManager->isAchievementEarned(ach->id.c_str())) {
                     isCategoryCompleted = false;
                     break;
@@ -194,6 +213,14 @@ void AchievementMenu::onCategoryButton(CCObject* sender) {
         popup->show();
     } else if (category->displayType == "distinct") {
         DistinctAchievementPopup* popup = DistinctAchievementPopup::create(this, category);
+        popup->m_noElasticity = GameManager::get()->getGameVariable("0168");  // For fast menu setting
+        popup->show();
+    } else if (category->displayType == "shard") {
+        ShardAchievementPopup* popup = ShardAchievementPopup::create(this, category);
+        popup->m_noElasticity = GameManager::get()->getGameVariable("0168");  // For fast menu setting
+        popup->show();
+    } else if (category->displayType == "path") {
+        PathAchievementPopup* popup = PathAchievementPopup::create(this, category);
         popup->m_noElasticity = GameManager::get()->getGameVariable("0168");  // For fast menu setting
         popup->show();
     }
@@ -240,7 +267,10 @@ void AchievementMenu::addNavigation() {
         leftArrowSprite,
         this,
         menu_selector(AchievementMenu::onCategoryArrow));
-    leftArrow->setPosition({-30.f, m_navMenu->getContentHeight() / 2});
+    if (m_mainLayer->getPositionX() - m_mainLayer->getContentWidth() / 2 > 40)
+        leftArrow->setPosition({-30.f, m_navMenu->getContentHeight() / 2});
+    else
+        leftArrow->setPosition({-16.f, m_navMenu->getContentHeight() / 2});
     leftArrow->setTag(0);
     leftArrow->setID("left-arrow");
     m_navMenu->addChild(leftArrow);
@@ -252,7 +282,10 @@ void AchievementMenu::addNavigation() {
         rightArrowSprite,
         this,
         menu_selector(AchievementMenu::onCategoryArrow));
-    rightArrow->setPosition({m_navMenu->getContentWidth() + 30.f, m_navMenu->getContentHeight() / 2});
+    if (m_mainLayer->getPositionX() - m_mainLayer->getContentWidth() / 2 > 40)
+        rightArrow->setPosition({m_navMenu->getContentWidth() + 30.f, m_navMenu->getContentHeight() / 2});
+    else
+        rightArrow->setPosition({m_navMenu->getContentWidth() + 6.f, m_navMenu->getContentHeight() / 2});
     rightArrow->setTag(1);
     rightArrow->setID("right-arrow");
     m_navMenu->addChild(rightArrow);
@@ -369,12 +402,10 @@ Category* AchievementMenu::getCategoryForAchievement(const std::string& id, cons
         }
     }
 
-    // Currently don't support path or shards achievements
-    // Could just open their vanilla menus when the category is clicked or
-    // build own menus for each to match the style of the mod
-    if (generic == "path##" || generic.find("shard") != std::string::npos) {
-        return nullptr;
-    }
+    if (generic.find("shard") != std::string::npos)
+        return &m_achievementCategories[19];  // Shards
+    if (generic == "path##")
+        return &m_achievementCategories[20];  // Paths
 
     // 'Players destroyed' achievements are grouped in with the secret achievements, so take those out based on their unlock description
     // Additionally, some 'Vault' achievements are grouped in with the secret achievements
@@ -382,10 +413,10 @@ Category* AchievementMenu::getCategoryForAchievement(const std::string& id, cons
         for (std::string id : cat.identifiers) {
             if (generic == id) {
                 if (cat.name == "Secret" && achievedDescription.find("Destroyed") != std::string::npos)
-                    return &m_achievementCategories[25];  // Players Destroyed
+                    return &m_achievementCategories[27];  // Players Destroyed
 
                 if (cat.name == "Secret" && achievedDescription.find("Vault") != std::string::npos)
-                    return &m_achievementCategories[24];  // Vaults
+                    return &m_achievementCategories[26];  // Vaults
 
                 return &cat;
             }
