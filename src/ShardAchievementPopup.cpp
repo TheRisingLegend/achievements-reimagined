@@ -252,20 +252,6 @@ cocos2d::CCNode* ShardAchievementPopup::createPage(int pageNum) {
     container->setPosition({225, 240});
     page->addChild(container);
 
-    /* Rank Logo */
-    // CCSprite* rankLogo = CCSprite::createWithSpriteFrameName(fmt::format("pathIcon_{:02}_001.png", pageNum + 1).c_str());
-    // rankLogo->setID("rank-logo");
-    // rankLogo->setScale(0.8f);
-    // rankLogo->setPosition({225, 205});
-
-    // CCLabelBMFont* rankLabel = CCLabelBMFont::create(std::to_string(gameStatsManager->getStat(std::to_string(pageNum + 30).c_str()) / 100).c_str(), "bigFont.fnt");
-    // rankLabel->setID("rank-label");
-    // rankLabel->setScale(0.5f);
-    // rankLabel->setPosition({rankLogo->getContentWidth() / 2 + 0.5f, rankLogo->getContentHeight() / 2 + 1});
-    // rankLogo->addChild(rankLabel);
-
-    // page->addChild(rankLogo);
-
     /* Progress Bar */
     CCNode* progressBar = CCNode::create();
     progressBar->setID("progress-bar-container");
