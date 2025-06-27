@@ -16,7 +16,7 @@ This mod adds a brand new look to the achievements menu!
 
 # Reporting Bugs
 
-If you find any bugs, please open an issue on [github](https://github.com/TheRisingLegend/achievements-reimagined) or message me on discord @kosmos6621.
+If you find any bugs or have a suggestion, please open an issue on [github](https://github.com/TheRisingLegend/achievements-reimagined) or message me on discord @kosmos6621.
 
 # Previews
 
