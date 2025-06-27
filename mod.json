@@ -8,7 +8,7 @@
 	},
 	"id": "therisinglegend.achievements_reimagined",
 	"name": "Achievements Reimagined",
-	"version": "v1.1.0",
+	"version": "v1.2.0",
 	"developer": "TheRisingLegend",
 	"description": "Completely remakes the achievements menu!",
 	"links": {
@@ -41,11 +41,11 @@
             "type": "bool",
             "default": true
         },
-		"use-better-descriptions": {
-			"name": "Use Better Descriptions",
-			"description": "Use better descriptions for how to complete achievements.",
+		"show-secrets": {
+			"name": "Show Secrets",
+			"description": "Use descriptions that reveal how to complete secret achievements, such as vault codes.",
 			"type": "bool",
-			"default": true,
+			"default": false,
 			"requires-restart": true
 		},
 		"hide-achievement-checkmarks": {

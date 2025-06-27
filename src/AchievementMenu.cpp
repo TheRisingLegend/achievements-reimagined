@@ -66,7 +66,14 @@ bool AchievementMenu::setup() {
         ach->title = std::string(dict->valueForKey("title")->getCString());
         ach->id = std::string(dict->valueForKey("identifier")->getCString());
 
-        if (Mod::get()->getSettingValue<bool>("use-better-descriptions") && betterDescriptions.contains(ach->id)) {
+        Category* category = getCategoryForAchievement(ach->id, betterDescriptions.contains(ach->id) ? std::get<1>(betterDescriptions[ach->id]) : std::string(dict->valueForKey("achievedDescription")->getCString()));
+        if (category == nullptr) {
+            log::debug("Category not found for ID: {}", ach->id);
+            continue;
+        }
+
+        if (betterDescriptions.contains(ach->id) && (category->name == "Players Destroyed" || Mod::get()->getSettingValue<bool>("show-secrets"))) {
+            log::debug("{} Using better descriptions for achievement: {}\t{}", betterDescriptions.contains(ach->id), ach->id, category->name);
             ach->unachievedDescription = std::get<0>(betterDescriptions[ach->id]);
             ach->achievedDescription = std::get<1>(betterDescriptions[ach->id]);
 
@@ -77,13 +84,6 @@ bool AchievementMenu::setup() {
             ach->unachievedDescription = std::string(dict->valueForKey("unachievedDescription")->getCString());
         }
 
-        Category* category = getCategoryForAchievement(ach->id, ach->achievedDescription);
-        if (category == nullptr) {
-            log::debug("Category not found for ID: {}", ach->id);
-            continue;
-        }
-
-        // if(category->displayType == "progress" || category->displayType == "shard")
         ach->unlockValue = category->displayType == "progress" || category->displayType == "shard" ? extractValue(ach->achievedDescription) : -1;
 
         std::string icon = std::string(dict->valueForKey("icon")->getCString());
@@ -97,9 +97,6 @@ bool AchievementMenu::setup() {
         }
 
         category->achievements.push_back(ach);
-
-        if (category->name == "Shards")
-            log::debug("{}", ach->id);
     }
 
     createCategoryMenu();
