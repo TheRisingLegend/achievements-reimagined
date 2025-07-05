@@ -1,9 +1,9 @@
-#include "ProgressAchievementPopup.hpp"
+#include "ProgressPopup.hpp"
 
 using namespace geode::prelude;
 
-ProgressAchievementPopup* ProgressAchievementPopup::create(AchievementMenu* achievementMenu, Category* category) {
-    auto popup = new ProgressAchievementPopup();
+ProgressPopup* ProgressPopup::create(AchievementMenu* achievementMenu, Category* category) {
+    auto popup = new ProgressPopup();
     if (popup && popup->initAnchored(450.f, 280.f, achievementMenu, category)) {
         popup->autorelease();
         return popup;
@@ -12,7 +12,7 @@ ProgressAchievementPopup* ProgressAchievementPopup::create(AchievementMenu* achi
     return nullptr;
 }
 
-bool ProgressAchievementPopup::setup(AchievementMenu* achievementMenu, Category* category) {
+bool ProgressPopup::setup(AchievementMenu* achievementMenu, Category* category) {
     m_achievementMenu = achievementMenu;
     m_category = category;
     m_numAchievements = m_category->achievements.size();
@@ -54,7 +54,7 @@ bool ProgressAchievementPopup::setup(AchievementMenu* achievementMenu, Category*
     return true;
 }
 
-CCNode* ProgressAchievementPopup::createPage(int pageNum) {
+CCNode* ProgressPopup::createPage(int pageNum) {
     auto page = CCNode::create();
     page->setPosition({0, 0});
 
@@ -210,7 +210,7 @@ CCNode* ProgressAchievementPopup::createPage(int pageNum) {
         CCMenuItemSpriteExtra* unlockButton = CCMenuItemSpriteExtra::create(
             unlockItem,
             this,
-            menu_selector(ProgressAchievementPopup::onIcon));
+            menu_selector(ProgressPopup::onIcon));
 
         // This is for the callback function
         IconCallbackData* data = new IconCallbackData(currAchievement->unlockType, currAchievement->unlockID);

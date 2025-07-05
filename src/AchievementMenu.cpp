@@ -1,9 +1,9 @@
 #include "AchievementMenu.hpp"
 
-#include "DistinctAchievementPopup.hpp"
-#include "PathAchievementPopup.hpp"
-#include "ProgressAchievementPopup.hpp"
-#include "ShardAchievementPopup.hpp"
+#include "DistinctPopup.hpp"
+#include "PathPopup.hpp"
+#include "ProgressPopup.hpp"
+#include "ShardPopup.hpp"
 
 using namespace geode::prelude;
 
@@ -73,7 +73,6 @@ bool AchievementMenu::setup() {
         }
 
         if (betterDescriptions.contains(ach->id) && (category->name == "Players Destroyed" || Mod::get()->getSettingValue<bool>("show-secrets"))) {
-            log::debug("{} Using better descriptions for achievement: {}\t{}", betterDescriptions.contains(ach->id), ach->id, category->name);
             ach->unachievedDescription = std::get<0>(betterDescriptions[ach->id]);
             ach->achievedDescription = std::get<1>(betterDescriptions[ach->id]);
 
@@ -204,23 +203,18 @@ void AchievementMenu::onCategoryButton(CCObject* sender) {
     int index = categoryButton->getTag();
     Category* category = &m_achievementCategories[index];
 
+    AchievementCategoryPopup* popup;
     if (category->displayType == "progress") {
-        ProgressAchievementPopup* popup = ProgressAchievementPopup::create(this, category);
-        popup->m_noElasticity = GameManager::get()->getGameVariable("0168");  // For fast menu setting
-        popup->show();
+        popup = ProgressPopup::create(this, category);
     } else if (category->displayType == "distinct") {
-        DistinctAchievementPopup* popup = DistinctAchievementPopup::create(this, category);
-        popup->m_noElasticity = GameManager::get()->getGameVariable("0168");  // For fast menu setting
-        popup->show();
+        popup = DistinctPopup::create(this, category);
     } else if (category->displayType == "shard") {
-        ShardAchievementPopup* popup = ShardAchievementPopup::create(this, category);
-        popup->m_noElasticity = GameManager::get()->getGameVariable("0168");  // For fast menu setting
-        popup->show();
+        popup = ShardPopup::create(this, category);
     } else if (category->displayType == "path") {
-        PathAchievementPopup* popup = PathAchievementPopup::create(this, category);
-        popup->m_noElasticity = GameManager::get()->getGameVariable("0168");  // For fast menu setting
-        popup->show();
+        popup = PathPopup::create(this, category);
     }
+    popup->m_noElasticity = GameManager::get()->getGameVariable("0168");  // For fast menu setting
+    popup->show();
 
     hideArrows();
 }

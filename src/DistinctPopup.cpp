@@ -1,11 +1,11 @@
-#include <unordered_map>
+#include "DistinctPopup.hpp"
 
-#include "DistinctAchievementPopup.hpp"
+#include <unordered_map>
 
 using namespace geode::prelude;
 
-DistinctAchievementPopup* DistinctAchievementPopup::create(AchievementMenu* achievementMenu, Category* category) {
-    auto popup = new DistinctAchievementPopup();
+DistinctPopup* DistinctPopup::create(AchievementMenu* achievementMenu, Category* category) {
+    auto popup = new DistinctPopup();
     if (popup && popup->initAnchored(450.f, 280.f, achievementMenu, category)) {
         popup->autorelease();
         return popup;
@@ -14,7 +14,7 @@ DistinctAchievementPopup* DistinctAchievementPopup::create(AchievementMenu* achi
     return nullptr;
 }
 
-bool DistinctAchievementPopup::setup(AchievementMenu* achievementMenu, Category* category) {
+bool DistinctPopup::setup(AchievementMenu* achievementMenu, Category* category) {
     m_achievementMenu = achievementMenu;
     m_category = category;
     m_numAchievements = m_category->achievements.size();
@@ -67,7 +67,7 @@ bool DistinctAchievementPopup::setup(AchievementMenu* achievementMenu, Category*
     return true;
 }
 
-CCNode* DistinctAchievementPopup::createPage(int pageNum) {
+CCNode* DistinctPopup::createPage(int pageNum) {
     auto page = CCNode::create();
     page->setPosition({0, 0});
 
@@ -171,7 +171,7 @@ CCNode* DistinctAchievementPopup::createPage(int pageNum) {
         CCMenuItemSpriteExtra* unlockButton = CCMenuItemSpriteExtra::create(
             unlockItem,
             this,
-            menu_selector(DistinctAchievementPopup::onIcon));
+            menu_selector(DistinctPopup::onIcon));
 
         // This is for the callback function
         IconCallbackData* data = new IconCallbackData(currAchievement->unlockType, currAchievement->unlockID);

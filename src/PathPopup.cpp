@@ -1,9 +1,9 @@
-#include "PathAchievementPopup.hpp"
+#include "PathPopup.hpp"
 
 using namespace geode::prelude;
 
-PathAchievementPopup* PathAchievementPopup::create(AchievementMenu* achievementMenu, Category* category) {
-    auto popup = new PathAchievementPopup();
+PathPopup* PathPopup::create(AchievementMenu* achievementMenu, Category* category) {
+    auto popup = new PathPopup();
     if (popup && popup->initAnchored(450.f, 280.f, achievementMenu, category)) {
         popup->autorelease();
         return popup;
@@ -12,7 +12,7 @@ PathAchievementPopup* PathAchievementPopup::create(AchievementMenu* achievementM
     return nullptr;
 }
 
-bool PathAchievementPopup::setup(AchievementMenu* achievementMenu, Category* category) {
+bool PathPopup::setup(AchievementMenu* achievementMenu, Category* category) {
     m_achievementMenu = achievementMenu;
     m_category = category;
     m_numAchievements = m_category->achievements.size();
@@ -40,7 +40,7 @@ bool PathAchievementPopup::setup(AchievementMenu* achievementMenu, Category* cat
     return true;
 }
 
-void PathAchievementPopup::addNavigation(int activePage) {
+void PathPopup::addNavigation(int activePage) {
     bool refresh = false;
     if (m_navButtons) {
         m_navButtons->removeAllChildren();
@@ -102,7 +102,7 @@ void PathAchievementPopup::addNavigation(int activePage) {
         CCMenuItemSpriteExtra* button = CCMenuItemSpriteExtra::create(
             i == activePage ? onSprite : offSprite,
             this,
-            menu_selector(PathAchievementPopup::onNavButton));
+            menu_selector(PathPopup::onNavButton));
         button->setID("page-button-" + std::to_string(i));
         button->setTag(i);
         button->setScale(0.8f);
@@ -122,7 +122,7 @@ void PathAchievementPopup::addNavigation(int activePage) {
     CCMenuItemSpriteExtra* leftArrow = CCMenuItemSpriteExtra::create(
         leftArrowSprite,
         this,
-        menu_selector(PathAchievementPopup::onArrow));
+        menu_selector(PathPopup::onArrow));
     if (m_mainLayer->getPositionX() - m_mainLayer->getContentWidth() / 2 > 40)
         leftArrow->setPosition({-30.f, m_navMenu->getContentHeight() / 2});
     else
@@ -137,7 +137,7 @@ void PathAchievementPopup::addNavigation(int activePage) {
     CCMenuItemSpriteExtra* rightArrow = CCMenuItemSpriteExtra::create(
         rightArrowSprite,
         this,
-        menu_selector(PathAchievementPopup::onArrow));
+        menu_selector(PathPopup::onArrow));
     if (m_mainLayer->getPositionX() - m_mainLayer->getContentWidth() / 2 > 40)
         rightArrow->setPosition({m_navMenu->getContentWidth() + 30.f, m_navMenu->getContentHeight() / 2});
     else
@@ -147,7 +147,7 @@ void PathAchievementPopup::addNavigation(int activePage) {
     m_navMenu->addChild(rightArrow);
 }
 
-void PathAchievementPopup::onNavButton(CCObject* sender) {
+void PathPopup::onNavButton(CCObject* sender) {
     CCMenuItemSpriteExtra* button = static_cast<CCMenuItemSpriteExtra*>(sender);
     int pageNum = button->getTag();
 
@@ -166,7 +166,7 @@ void PathAchievementPopup::onNavButton(CCObject* sender) {
     m_navMenu->getChildByID("right-arrow")->setVisible(pageNum < m_numPages - 1);
 }
 
-void PathAchievementPopup::onArrow(CCObject* sender) {
+void PathPopup::onArrow(CCObject* sender) {
     CCMenuItemSpriteExtra* button = static_cast<CCMenuItemSpriteExtra*>(sender);
     int direction = button->getTag();
 
@@ -196,7 +196,7 @@ void PathAchievementPopup::onArrow(CCObject* sender) {
     m_navMenu->getChildByID("right-arrow")->setVisible(newPage < m_numPages - 1);
 }
 
-cocos2d::CCNode* PathAchievementPopup::createPage(int pageNum) {
+cocos2d::CCNode* PathPopup::createPage(int pageNum) {
     auto page = CCNode::create();
     page->setPosition({0, 0});
 
@@ -402,7 +402,7 @@ cocos2d::CCNode* PathAchievementPopup::createPage(int pageNum) {
         CCMenuItemSpriteExtra* unlockButton = CCMenuItemSpriteExtra::create(
             unlockItem,
             this,
-            menu_selector(PathAchievementPopup::onIcon));
+            menu_selector(PathPopup::onIcon));
 
         // This is for the callback function
         IconCallbackData* data = new IconCallbackData(currAchievement->unlockType, currAchievement->unlockID);

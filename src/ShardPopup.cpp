@@ -1,9 +1,9 @@
-#include "ShardAchievementPopup.hpp"
+#include "ShardPopup.hpp"
 
 using namespace geode::prelude;
 
-ShardAchievementPopup* ShardAchievementPopup::create(AchievementMenu* achievementMenu, Category* category) {
-    auto popup = new ShardAchievementPopup();
+ShardPopup* ShardPopup::create(AchievementMenu* achievementMenu, Category* category) {
+    auto popup = new ShardPopup();
     if (popup && popup->initAnchored(450.f, 280.f, achievementMenu, category)) {
         popup->autorelease();
         return popup;
@@ -12,7 +12,7 @@ ShardAchievementPopup* ShardAchievementPopup::create(AchievementMenu* achievemen
     return nullptr;
 }
 
-bool ShardAchievementPopup::setup(AchievementMenu* achievementMenu, Category* category) {
+bool ShardPopup::setup(AchievementMenu* achievementMenu, Category* category) {
     m_achievementMenu = achievementMenu;
     m_category = category;
     m_numAchievements = m_category->achievements.size();
@@ -37,7 +37,7 @@ bool ShardAchievementPopup::setup(AchievementMenu* achievementMenu, Category* ca
     return true;
 }
 
-void ShardAchievementPopup::addNavigation(int activePage) {
+void ShardPopup::addNavigation(int activePage) {
     bool refresh = false;
     if (m_navButtons) {
         m_navButtons->removeAllChildren();
@@ -99,7 +99,7 @@ void ShardAchievementPopup::addNavigation(int activePage) {
         CCMenuItemSpriteExtra* button = CCMenuItemSpriteExtra::create(
             i == activePage ? onSprite : offSprite,
             this,
-            menu_selector(ShardAchievementPopup::onNavButton));
+            menu_selector(ShardPopup::onNavButton));
         button->setID("page-button-" + std::to_string(i));
         button->setTag(i);
         button->setScale(0.8f);
@@ -119,7 +119,7 @@ void ShardAchievementPopup::addNavigation(int activePage) {
     CCMenuItemSpriteExtra* leftArrow = CCMenuItemSpriteExtra::create(
         leftArrowSprite,
         this,
-        menu_selector(ShardAchievementPopup::onArrow));
+        menu_selector(ShardPopup::onArrow));
     if (m_mainLayer->getPositionX() - m_mainLayer->getContentWidth() / 2 > 40)
         leftArrow->setPosition({-30.f, m_navMenu->getContentHeight() / 2});
     else
@@ -134,7 +134,7 @@ void ShardAchievementPopup::addNavigation(int activePage) {
     CCMenuItemSpriteExtra* rightArrow = CCMenuItemSpriteExtra::create(
         rightArrowSprite,
         this,
-        menu_selector(ShardAchievementPopup::onArrow));
+        menu_selector(ShardPopup::onArrow));
     if (m_mainLayer->getPositionX() - m_mainLayer->getContentWidth() / 2 > 40)
         rightArrow->setPosition({m_navMenu->getContentWidth() + 30.f, m_navMenu->getContentHeight() / 2});
     else
@@ -144,7 +144,7 @@ void ShardAchievementPopup::addNavigation(int activePage) {
     m_navMenu->addChild(rightArrow);
 }
 
-void ShardAchievementPopup::onNavButton(CCObject* sender) {
+void ShardPopup::onNavButton(CCObject* sender) {
     CCMenuItemSpriteExtra* button = static_cast<CCMenuItemSpriteExtra*>(sender);
     int pageNum = button->getTag();
 
@@ -163,7 +163,7 @@ void ShardAchievementPopup::onNavButton(CCObject* sender) {
     m_navMenu->getChildByID("right-arrow")->setVisible(pageNum < m_numPages - 1);
 }
 
-void ShardAchievementPopup::onArrow(CCObject* sender) {
+void ShardPopup::onArrow(CCObject* sender) {
     CCMenuItemSpriteExtra* button = static_cast<CCMenuItemSpriteExtra*>(sender);
     int direction = button->getTag();
 
@@ -193,7 +193,7 @@ void ShardAchievementPopup::onArrow(CCObject* sender) {
     m_navMenu->getChildByID("right-arrow")->setVisible(newPage < m_numPages - 1);
 }
 
-cocos2d::CCNode* ShardAchievementPopup::createPage(int pageNum) {
+cocos2d::CCNode* ShardPopup::createPage(int pageNum) {
     auto page = CCNode::create();
     page->setPosition({0, 0});
 
@@ -402,7 +402,7 @@ cocos2d::CCNode* ShardAchievementPopup::createPage(int pageNum) {
         CCMenuItemSpriteExtra* unlockButton = CCMenuItemSpriteExtra::create(
             unlockItem,
             this,
-            menu_selector(ShardAchievementPopup::onIcon));
+            menu_selector(ShardPopup::onIcon));
 
         // This is for the callback function
         IconCallbackData* data = new IconCallbackData(currAchievement->unlockType, currAchievement->unlockID);
