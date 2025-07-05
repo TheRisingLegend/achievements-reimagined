@@ -108,7 +108,7 @@ CCNode* DistinctAchievementPopup::createPage(int pageNum) {
         lock->setZOrder(1);
 
         /* Unlock description */
-        SimpleTextArea* desc = SimpleTextArea::create(earned ? currAchievement->unachievedDescription : currAchievement->achievedDescription, "bigFont.fnt", 0.2f, 70);
+        SimpleTextArea* desc = SimpleTextArea::create(earned ? currAchievement->achievedDescription : currAchievement->unachievedDescription, "bigFont.fnt", 0.2f, 70);
         desc->setAlignment(kCCTextAlignmentCenter);
         desc->setWrappingMode(WrappingMode::SPACE_WRAP);
         desc->setAnchorPoint({0.5f, 1});
