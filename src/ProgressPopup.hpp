@@ -13,6 +13,7 @@ class ProgressPopup : public AchievementCategoryPopup {
     static ProgressPopup* create(AchievementMenu* achievementMenu, Category* category);
 
     cocos2d::CCNode* createPage(int pageNum);
+    cocos2d::CCNode* createProgressBar(int pageNum, int numIconsOnPage);
 
     int m_statValue;
 };

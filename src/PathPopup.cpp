@@ -281,9 +281,11 @@ cocos2d::CCNode* PathPopup::createPage(int pageNum) {
     int numIconsOnPage = 11;
     int numDotsOnPage = numIconsOnPage;
 
+    float dotSpacing = std::min(50.f, 400.f / numDotsOnPage);
+
     CCSprite* progressBarBgSpr = CCSprite::createWithSpriteFrameName("whiteSquare20_001.png");  // the long gray bar that acts as the background for the fill
     progressBarBgSpr->setID("progress-bar-bg-sprite");
-    progressBarBgSpr->setScaleX(2.f * numDotsOnPage - 2.f);
+    progressBarBgSpr->setScaleX(dotSpacing / 10 * numDotsOnPage - dotSpacing / 10);
     progressBarBgSpr->setScaleY(0.5f);
 
     progressBarBgSpr->setPosition({0, 0});
@@ -293,7 +295,7 @@ cocos2d::CCNode* PathPopup::createPage(int pageNum) {
     for (int i = 0; i < numDotsOnPage; ++i) {
         CCSprite* dotBgSpr = CCSprite::create("smallDot.png");  // the gray dots that mark each unlock point
         dotBgSpr->setID("dot-bg-sprite-" + std::to_string(i));
-        dotBgSpr->setPosition({-20.f * numIconsOnPage / 2.f + 20.f * i + 10, 0});
+        dotBgSpr->setPosition({-dotSpacing * numIconsOnPage / 2.f + dotSpacing * i + dotSpacing / 2, 0});
         dotBgSpr->setColor({37, 20, 12});
         progressBarBg->addChild(dotBgSpr);
 
@@ -302,10 +304,10 @@ cocos2d::CCNode* PathPopup::createPage(int pageNum) {
 
         if (i % 2 == 0) {  // alternate the vertical bars above and below
             verticalBarBgSpr->setAnchorPoint({0.5f, 0});
-            verticalBarBgSpr->setPosition({-20.f * numIconsOnPage / 2.f + 20.f * i + 10, 10.f});
+            verticalBarBgSpr->setPosition({-dotSpacing * numIconsOnPage / 2.f + dotSpacing * i + dotSpacing / 2, 10.f});
         } else {
             verticalBarBgSpr->setAnchorPoint({0.5f, 1});
-            verticalBarBgSpr->setPosition({-20.f * numIconsOnPage / 2.f + 20.f * i + 10, -10.f});
+            verticalBarBgSpr->setPosition({-dotSpacing * numIconsOnPage / 2.f + dotSpacing * i + dotSpacing / 2, -10.f});
         }
 
         verticalBarBgSpr->setScaleX(0.1f);
@@ -333,7 +335,7 @@ cocos2d::CCNode* PathPopup::createPage(int pageNum) {
     for (int i = 0; i < numAchievementsUnlocked; ++i) {
         CCSprite* dotFillSpr = CCSprite::create("smallDot.png");  // the colored dots that mark the reached unlock points
         dotFillSpr->setID("dot-fill-sprite-" + std::to_string(i));
-        dotFillSpr->setPosition({-20.f * numIconsOnPage / 2.f + 20.f * i + 10, 0});
+        dotFillSpr->setPosition({-dotSpacing * numIconsOnPage / 2.f + dotSpacing * i + dotSpacing / 2, 0});
         dotFillSpr->setColor(usePlayerColors ? gameManager->colorForIdx(gameManager->getPlayerColor()) : ccc3(255, 255, 255));
         dotFillSpr->setScale(0.7f);
         progressBarFill->addChild(dotFillSpr);
@@ -344,9 +346,9 @@ cocos2d::CCNode* PathPopup::createPage(int pageNum) {
     CCSprite* fillSpr = CCSprite::createWithSpriteFrameName("whiteSquare20_001.png");  // the colored bar that fills up to the next unlock point and marks the progress
     fillSpr->setID("progress-bar-fill-sprite");
     fillSpr->setAnchorPoint({0, 0.5f});
-    fillSpr->setPosition({-20.f * numIconsOnPage / 2.f + 10, 0});
+    fillSpr->setPosition({-dotSpacing * numIconsOnPage / 2.f + dotSpacing / 2, 0});
     fillSpr->setColor(usePlayerColors ? gameManager->colorForIdx(gameManager->getPlayerColor()) : ccc3(255, 255, 255));
-    fillSpr->setScaleX(20.f * ratio);
+    fillSpr->setScaleX(dotSpacing * ratio);
     fillSpr->setScaleY(0.2f);
     progressBarFill->addChild(fillSpr);
 
@@ -410,7 +412,7 @@ cocos2d::CCNode* PathPopup::createPage(int pageNum) {
         unlockButton->setUserObject(data);
 
         unlockButton->setID("unlock-sprite-" + std::to_string(i));
-        unlockButton->setPosition({-20.f * numIconsOnPage / 2.f + 20.f * i + 10, (i % 2 == 0) ? 40.f : -40.f});
+        unlockButton->setPosition({-dotSpacing * numIconsOnPage / 2.f + dotSpacing * i + dotSpacing / 2, (i % 2 == 0) ? 40.f : -40.f});
         unlockButton->m_baseScale = 0.7f;
         unlockButton->setScale(0.7f);
         playerMenu->addChild(unlockButton);
