@@ -8,7 +8,7 @@
 	},
 	"id": "therisinglegend.achievements_reimagined",
 	"name": "Achievements Reimagined",
-	"version": "v1.2.0",
+	"version": "v1.2.1",
 	"developer": "TheRisingLegend",
 	"description": "Completely remakes the achievements menu!",
 	"links": {
@@ -17,7 +17,8 @@
 	"resources": {
 		"sprites": [
 			"preview1.png",
-			"preview2.png"
+			"preview2.png",
+			"preview3.png"
 		]
 	},
 	"tags": [
@@ -44,6 +45,12 @@
 			"type": "bool",
 			"default": false,
 			"requires-restart": true
+		},
+		"all-discrete": {
+			"name": "No Progress Bars",
+			"description": "Show all achievements with their own boxes instead of combining into a progress bar when possible. (Not recommended but you have free will so...)",
+			"type": "bool",
+			"default": false
 		},
 		"hide-achievement-checkmarks": {
 			"name": "Hide Achievement Completion Checkmarks",

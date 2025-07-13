@@ -23,3 +23,5 @@ If you find any bugs or have a suggestion, please open an issue on [github](http
 <img src="preview1.png" width="350" alt="Achievements Reimagined preview1" />
 
 <img src="preview2.png" width="350" alt="Achievements Reimagined preview2" />
+
+<img src="preview3.png" width="350" alt="Achievements Reimagined preview3" />
