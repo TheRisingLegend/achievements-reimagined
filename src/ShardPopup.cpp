@@ -70,15 +70,14 @@ void ShardPopup::addNavigation(int activePage) {
         CCSprite* offSprite = CCSprite::createWithSpriteFrameName(shardSprites[i]);
         offSprite->setScale(i == 5 || i == 11 ? 1.f : 0.5f);
 
-        int statID = 16 + i;
-        if (statID > 21) statID += 1;
+        int gameStatID = gameStatIDs[i];
         int progress = 100;
-        if (statID == 21 || statID == 28) {  // bonus pages, these values aren't stored so need to calculate them
-            for (int i = statID - 5; i < statID; ++i) {
-                progress = std::min(progress, gameStatsManager->getStat(std::to_string(i).c_str()));
+        if (i == 5 || i == 11) {  // bonus pages, these values aren't stored so need to calculate them
+            for (int j = i - 5; j < i; ++j) {
+                progress = std::min(progress, gameStatsManager->getStat(std::to_string(gameStatIDs[j]).c_str()));
             }
         } else
-            progress = gameStatsManager->getStat(std::to_string(statID).c_str());
+            progress = gameStatsManager->getStat(std::to_string(gameStatID).c_str());
 
         bool showCheckmark = !Mod::get()->getSettingValue<bool>("hide-achievement-checkmarks") && progress >= 100;
         if (showCheckmark) {
@@ -214,15 +213,15 @@ cocos2d::CCNode* ShardPopup::createPage(int pageNum) {
     container->setAnchorPoint({0.5f, 0.5f});
     container->setContentSize({100, 20});
 
-    int statID = 16 + pageNum;
-    if (statID > 21) statID += 1;
+    int gameStatID = gameStatIDs[pageNum];
+    log::debug("stat ID: {}", gameStatID);
     int progress = 100;
-    if (statID == 21 || statID == 28) {  // bonus pages, these values aren't stored so need to calculate them
-        for (int i = statID - 5; i < statID; ++i) {
-            progress = std::min(progress, gameStatsManager->getStat(std::to_string(i).c_str()));
+    if (pageNum == 5 || pageNum == 11) {  // bonus pages, these values aren't stored so need to calculate them
+        for (int i = pageNum - 5; i < pageNum; ++i) {
+            progress = std::min(progress, gameStatsManager->getStat(std::to_string(gameStatIDs[i]).c_str()));
         }
     } else
-        progress = gameStatsManager->getStat(std::to_string(statID).c_str());
+        progress = gameStatsManager->getStat(std::to_string(gameStatID).c_str());
 
     CCLabelBMFont* progressLabel = nullptr;
     if (progress < 100) {
