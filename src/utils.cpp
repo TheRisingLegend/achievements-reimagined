@@ -65,7 +65,7 @@ std::string formatWithCommas(int number) {
     return s;
 }
 
-// entry condition: this achievement is part of a progress category
+// entry condition: description is from achievement that is part of a progress category
 int extractValue(const std::string& desc) {
     std::regex numberRegex(R"((\d+))");
     std::smatch match;

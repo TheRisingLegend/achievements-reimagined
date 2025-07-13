@@ -1,3 +1,11 @@
+# 1.2.1
+
+- Progress bars now scale to better fill the whole page
+- Mod logo now uses the achievement trophy instead of the leaderboard trophy
+- Added option to not use progress bars
+- Fixed achievement descriptions to show the correct version based on completion status
+- Fixed shards using the wrong stat (thanks Samcio123gd)
+
 # 1.2.0
 
 - Added menu for shards and paths achievements

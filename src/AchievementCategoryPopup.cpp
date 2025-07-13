@@ -99,7 +99,7 @@ void AchievementCategoryPopup::addNavigation() {
 
     m_navButtons = CCMenu::create();
     m_navButtons->setPosition({m_navMenu->getContentWidth() / 2, 20.f});
-    m_navButtons->setContentSize({100.f, 20.f});
+    m_navButtons->setContentSize({400.f, 20.f});
     m_navButtons->setID("nav-buttons");
     m_navButtons->setLayout(RowLayout::create()
                                 ->setGap(10.0f)

@@ -33,7 +33,7 @@ bool AchievementMenu::setup() {
         {"User Coins", "User Coins", "Stats", "progress", "secretCoinUI2_001.png", {"usercoins##"}, "12"},
         {"Jumps", "Jumps", "Stats", "progress", "PBtn_Jump_001.png", {"jump##"}, "1"},
         {"Attempts", "Attempts", "Stats", "progress", "GJ_playBtn2_001.png", {"attempt##"}, "2"},
-        {"Shards", "Shards", "Stats", "shard", "GJ_shardsBtn_001.png", {}},
+        {"Shards", "Shards", "Stats", "shard", "bonusShardSmall_001.png", {}},
         {"Paths", "Paths", "Stats", "path", "GJ_pathsBtn_001.png", {}},
 
         // Social
@@ -98,6 +98,10 @@ bool AchievementMenu::setup() {
         category->achievements.push_back(ach);
     }
 
+    auto SFC = CCSpriteFrameCache::get();
+    SFC->addSpriteFramesWithFile("TowerSheet.plist");
+    SFC->addSpriteFramesWithFile("PlayerExplosion_01.plist");
+
     createCategoryMenu();
 
     addNavigation();
@@ -159,10 +163,9 @@ void AchievementMenu::addCategoryButtons(CCMenu* menuPage, std::string pageTitle
         // CCSprite* logo = CCSprite::createWithSpriteFrameName(m_achievementCategories[i].logo.c_str());
         // if (!logo) {
         //     log::error("Failed to load logo for category: {}", m_achievementCategories[i].name);
-
         // } else {
         //     logo->setID("logo");
-        //     logo->setScale(25.f / logo->getContentWidth());
+        //     logo->setScale(std::min(25.f / logo->getContentWidth(), 25.f / logo->getContentHeight()));
         //     logo->setPosition({buttonSprite->getContentWidth() / 2, 0});
         //     logo->setZOrder(1);
         //     buttonSprite->addChild(logo);
@@ -204,10 +207,11 @@ void AchievementMenu::onCategoryButton(CCObject* sender) {
     Category* category = &m_achievementCategories[index];
 
     AchievementCategoryPopup* popup;
-    if (category->displayType == "progress") {
-        popup = ProgressPopup::create(this, category);
-    } else if (category->displayType == "distinct") {
+
+    if (category->displayType == "distinct" || Mod::get()->getSettingValue<bool>("all-discrete")) {
         popup = DistinctPopup::create(this, category);
+    } else if (category->displayType == "progress") {
+        popup = ProgressPopup::create(this, category);
     } else if (category->displayType == "shard") {
         popup = ShardPopup::create(this, category);
     } else if (category->displayType == "path") {
@@ -229,7 +233,7 @@ void AchievementMenu::addNavigation() {
 
     m_navButtons = CCMenu::create();
     m_navButtons->setPosition({m_navMenu->getContentWidth() / 2, 20.f});
-    m_navButtons->setContentSize({100.f, 20.f});
+    m_navButtons->setContentSize({400.f, 20.f});
     m_navButtons->setID("nav-buttons");
     m_navButtons->setLayout(RowLayout::create()
                                 ->setGap(10.0f)
