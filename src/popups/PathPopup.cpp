@@ -1,9 +1,9 @@
-#include "ShardPopup.hpp"
+#include "PathPopup.hpp"
 
 using namespace geode::prelude;
 
-ShardPopup* ShardPopup::create(AchievementMenu* achievementMenu, Category* category) {
-    auto popup = new ShardPopup();
+PathPopup* PathPopup::create(AchievementMenu* achievementMenu, Category* category) {
+    auto popup = new PathPopup();
     if (popup && popup->initAnchored(450.f, 280.f, achievementMenu, category)) {
         popup->autorelease();
         return popup;
@@ -12,7 +12,7 @@ ShardPopup* ShardPopup::create(AchievementMenu* achievementMenu, Category* categ
     return nullptr;
 }
 
-bool ShardPopup::setup(AchievementMenu* achievementMenu, Category* category) {
+bool PathPopup::setup(AchievementMenu* achievementMenu, Category* category) {
     m_achievementMenu = achievementMenu;
     m_category = category;
     m_numAchievements = m_category->achievements.size();
@@ -20,7 +20,10 @@ bool ShardPopup::setup(AchievementMenu* achievementMenu, Category* category) {
     addCornerSprites();
 
     // create pages
-    m_maxIconsPerPage = 5;
+    auto SFC = CCSpriteFrameCache::get();
+    SFC->addSpriteFramesWithFile("GJ_PathSheet.plist");
+
+    m_maxIconsPerPage = 11;
     m_numPages = (m_numAchievements + m_maxIconsPerPage - 1) / m_maxIconsPerPage;
     for (int i = 0; i < m_numPages; i++) {
         CCNode* page = createPage(i);
@@ -37,7 +40,7 @@ bool ShardPopup::setup(AchievementMenu* achievementMenu, Category* category) {
     return true;
 }
 
-void ShardPopup::addNavigation(int activePage) {
+void PathPopup::addNavigation(int activePage) {
     bool refresh = false;
     if (m_navButtons) {
         m_navButtons->removeAllChildren();
@@ -65,26 +68,16 @@ void ShardPopup::addNavigation(int activePage) {
 
     // navigation buttons
     for (int i = 0; i < m_numPages; i++) {
-        CCSprite* onSprite = CCSprite::createWithSpriteFrameName(shardSprites[i]);
-        onSprite->setScale(i == 5 || i == 11 ? 1.5f : 0.75f);
-        CCSprite* offSprite = CCSprite::createWithSpriteFrameName(shardSprites[i]);
-        offSprite->setScale(i == 5 || i == 11 ? 1.f : 0.5f);
+        CCSprite* onSprite = CCSprite::createWithSpriteFrameName(fmt::format("pathIcon_{:02}_001.png", i + 1).c_str());
+        onSprite->setScale(0.75f);
+        CCSprite* offSprite = CCSprite::createWithSpriteFrameName(fmt::format("pathIcon_{:02}_001.png", i + 1).c_str());
+        offSprite->setScale(0.5f);
 
-        int gameStatID = gameStatIDs[i];
-        int progress = 100;
-        if (i == 5 || i == 11) {  // bonus pages, these values aren't stored so need to calculate them
-            for (int j = i - 5; j < i; ++j) {
-                progress = std::min(progress, gameStatsManager->getStat(std::to_string(gameStatIDs[j]).c_str()));
-            }
-        } else
-            progress = gameStatsManager->getStat(std::to_string(gameStatID).c_str());
-
-        bool showCheckmark = !Mod::get()->getSettingValue<bool>("hide-achievement-checkmarks") && progress >= 100;
+        bool showCheckmark = !Mod::get()->getSettingValue<bool>("hide-achievement-checkmarks") && gameStatsManager->getStat(std::to_string(i + 30).c_str()) >= 1000;
         if (showCheckmark) {
             CCSprite* checkmark = CCSprite::createWithSpriteFrameName("GJ_completesIcon_001.png");
             checkmark->setID("checkmark");
             checkmark->setZOrder(1);
-            checkmark->setScale(i == 5 || i == 11 ? 0.5f : 1.f);
 
             if (i == activePage) {
                 checkmark->setPosition({onSprite->getContentWidth() / 2, onSprite->getContentHeight() / 2});
@@ -93,19 +86,30 @@ void ShardPopup::addNavigation(int activePage) {
                 checkmark->setPosition({offSprite->getContentWidth() / 2, offSprite->getContentHeight() / 2});
                 offSprite->addChild(checkmark);
             }
+        } else {
+            CCLabelBMFont* rankLabel = CCLabelBMFont::create(std::to_string(gameStatsManager->getStat(std::to_string(i + 30).c_str()) / 100).c_str(), "bigFont.fnt");
+            rankLabel->setID("rank-label");
+            rankLabel->setScale(0.5f);
+            if (i == activePage) {
+                rankLabel->setPosition({onSprite->getContentWidth() / 2 + 0.5f, onSprite->getContentHeight() / 2 + 1});
+                onSprite->addChild(rankLabel);
+            } else {
+                rankLabel->setPosition({offSprite->getContentWidth() / 2 + 0.5f, offSprite->getContentHeight() / 2 + 1});
+                offSprite->addChild(rankLabel);
+            }
         }
 
         CCMenuItemSpriteExtra* button = CCMenuItemSpriteExtra::create(
             i == activePage ? onSprite : offSprite,
             this,
-            menu_selector(ShardPopup::onNavButton));
+            menu_selector(PathPopup::onNavButton));
         button->setID("page-button-" + std::to_string(i));
         button->setTag(i);
         button->setScale(0.8f);
         button->m_baseScale = 0.8f;
-        button->setContentWidth(30.f);
+        button->setContentWidth(40.f);
         if (auto sprite = typeinfo_cast<CCSprite*>(button->getChildren()->objectAtIndex(0)))
-            sprite->setPositionX(15.f);
+            sprite->setPositionX(20.f);
 
         m_navButtons->addChild(button);
     }
@@ -118,7 +122,7 @@ void ShardPopup::addNavigation(int activePage) {
     CCMenuItemSpriteExtra* leftArrow = CCMenuItemSpriteExtra::create(
         leftArrowSprite,
         this,
-        menu_selector(ShardPopup::onArrow));
+        menu_selector(PathPopup::onArrow));
     if (m_mainLayer->getPositionX() - m_mainLayer->getContentWidth() / 2 > 40)
         leftArrow->setPosition({-30.f, m_navMenu->getContentHeight() / 2});
     else
@@ -133,7 +137,7 @@ void ShardPopup::addNavigation(int activePage) {
     CCMenuItemSpriteExtra* rightArrow = CCMenuItemSpriteExtra::create(
         rightArrowSprite,
         this,
-        menu_selector(ShardPopup::onArrow));
+        menu_selector(PathPopup::onArrow));
     if (m_mainLayer->getPositionX() - m_mainLayer->getContentWidth() / 2 > 40)
         rightArrow->setPosition({m_navMenu->getContentWidth() + 30.f, m_navMenu->getContentHeight() / 2});
     else
@@ -143,7 +147,7 @@ void ShardPopup::addNavigation(int activePage) {
     m_navMenu->addChild(rightArrow);
 }
 
-void ShardPopup::onNavButton(CCObject* sender) {
+void PathPopup::onNavButton(CCObject* sender) {
     CCMenuItemSpriteExtra* button = static_cast<CCMenuItemSpriteExtra*>(sender);
     int pageNum = button->getTag();
 
@@ -162,7 +166,7 @@ void ShardPopup::onNavButton(CCObject* sender) {
     m_navMenu->getChildByID("right-arrow")->setVisible(pageNum < m_numPages - 1);
 }
 
-void ShardPopup::onArrow(CCObject* sender) {
+void PathPopup::onArrow(CCObject* sender) {
     CCMenuItemSpriteExtra* button = static_cast<CCMenuItemSpriteExtra*>(sender);
     int direction = button->getTag();
 
@@ -192,19 +196,18 @@ void ShardPopup::onArrow(CCObject* sender) {
     m_navMenu->getChildByID("right-arrow")->setVisible(newPage < m_numPages - 1);
 }
 
-cocos2d::CCNode* ShardPopup::createPage(int pageNum) {
+cocos2d::CCNode* PathPopup::createPage(int pageNum) {
     auto page = CCNode::create();
     page->setPosition({0, 0});
 
     /* Path Logo*/
-    CCSprite* shardLogo = CCSprite::createWithSpriteFrameName(shardLogos[pageNum]);
-    if (!shardLogo) {
-        log::error("Failed to load shard logo for page {}", pageNum);
+    CCSprite* pathLogo = CCSprite::createWithSpriteFrameName(fmt::format("pathLabel_{:02}_001.png", pageNum + 1).c_str());
+    if (!pathLogo) {
+        log::error("Failed to load path logo for page {}", pageNum + 1);
     } else {
-        shardLogo->setID("shard-logo");
-        shardLogo->setScale(1.2f);
-        shardLogo->setPosition({225, 260});
-        page->addChild(shardLogo);
+        pathLogo->setID("path-logo");
+        pathLogo->setPosition({225, 260});
+        page->addChild(pathLogo);
     }
 
     /* Progress Fraction */
@@ -213,18 +216,10 @@ cocos2d::CCNode* ShardPopup::createPage(int pageNum) {
     container->setAnchorPoint({0.5f, 0.5f});
     container->setContentSize({100, 20});
 
-    int gameStatID = gameStatIDs[pageNum];
-    log::debug("stat ID: {}", gameStatID);
-    int progress = 100;
-    if (pageNum == 5 || pageNum == 11) {  // bonus pages, these values aren't stored so need to calculate them
-        for (int i = pageNum - 5; i < pageNum; ++i) {
-            progress = std::min(progress, gameStatsManager->getStat(std::to_string(gameStatIDs[i]).c_str()));
-        }
-    } else
-        progress = gameStatsManager->getStat(std::to_string(gameStatID).c_str());
+    int progress = std::min(1000, gameStatsManager->getStat(std::to_string(pageNum + 30).c_str()));
 
     CCLabelBMFont* progressLabel = nullptr;
-    if (progress < 100) {
+    if (progress < 1000) {
         progressLabel = CCLabelBMFont::create(formatWithCommas(progress).c_str(), "bigFont.fnt");
         progressLabel->setScale(0.39f);
         progressLabel->setPosition({container->getContentWidth() / 2 - 2, container->getContentHeight() / 2 - 0.25f});
@@ -234,22 +229,42 @@ cocos2d::CCNode* ShardPopup::createPage(int pageNum) {
         progressLabel->setPosition({container->getContentWidth() / 2 - 2, container->getContentHeight() / 2});
     }
 
-    CCLabelBMFont* goalLabel = CCLabelBMFont::create("/100", "goldFont.fnt");
+    CCLabelBMFont* goalLabel = CCLabelBMFont::create("/1,000", "goldFont.fnt");
     goalLabel->setScale(0.5f);
     goalLabel->setAnchorPoint({0, 0.5f});
     goalLabel->setPosition({container->getContentWidth() / 2 - 3, container->getContentHeight() / 2});
     progressLabel->setAnchorPoint({1, 0.5f});
 
-    CCSprite* shard = CCSprite::createWithSpriteFrameName(shardSprites[pageNum]);
-    shard->setID("shard");
-    shard->setScale(pageNum == 5 || pageNum == 11 ? 0.75f : 0.5f);
-    shard->setPosition({container->getContentWidth() / 2 + 34, container->getContentHeight() / 2 - 1});
+    CCSprite* star = CCSprite::createWithSpriteFrameName("GJ_starsIcon_001.png");
+    star->setID("star");
+    star->setScale(0.5f);
+    star->setPosition({container->getContentWidth() / 2 + 44, container->getContentHeight() / 2 - 1});
+
+    CCSprite* moon = CCSprite::createWithSpriteFrameName("GJ_moonsIcon_001.png");
+    moon->setID("moon");
+    moon->setPosition({container->getContentWidth() / 2 + 56, container->getContentHeight() / 2 - 1});
+    moon->setScale(0.5f);
 
     container->addChild(progressLabel);
     container->addChild(goalLabel);
-    container->addChild(shard);
+    container->addChild(star);
+    container->addChild(moon);
     container->setPosition({225, 240});
     page->addChild(container);
+
+    /* Rank Logo */
+    CCSprite* rankLogo = CCSprite::createWithSpriteFrameName(fmt::format("pathIcon_{:02}_001.png", pageNum + 1).c_str());
+    rankLogo->setID("rank-logo");
+    rankLogo->setScale(0.8f);
+    rankLogo->setPosition({225, 205});
+
+    CCLabelBMFont* rankLabel = CCLabelBMFont::create(std::to_string(gameStatsManager->getStat(std::to_string(pageNum + 30).c_str()) / 100).c_str(), "bigFont.fnt");
+    rankLabel->setID("rank-label");
+    rankLabel->setScale(0.5f);
+    rankLabel->setPosition({rankLogo->getContentWidth() / 2 + 0.5f, rankLogo->getContentHeight() / 2 + 1});
+    rankLogo->addChild(rankLabel);
+
+    page->addChild(rankLogo);
 
     /* Progress Bar */
     CCNode* progressBar = CCNode::create();
@@ -263,8 +278,8 @@ cocos2d::CCNode* ShardPopup::createPage(int pageNum) {
     progressBarBg->setPosition({0, 0});
     progressBar->addChild(progressBarBg);
 
-    int numIconsOnPage = 5;
-    int numDotsOnPage = numIconsOnPage + 1;
+    int numIconsOnPage = 11;
+    int numDotsOnPage = numIconsOnPage;
 
     float dotSpacing = std::min(50.f, 400.f / numDotsOnPage);
 
@@ -280,28 +295,26 @@ cocos2d::CCNode* ShardPopup::createPage(int pageNum) {
     for (int i = 0; i < numDotsOnPage; ++i) {
         CCSprite* dotBgSpr = CCSprite::create("smallDot.png");  // the gray dots that mark each unlock point
         dotBgSpr->setID("dot-bg-sprite-" + std::to_string(i));
-        dotBgSpr->setPosition({-dotSpacing * numIconsOnPage / 2.f + dotSpacing * i, 0});
+        dotBgSpr->setPosition({-dotSpacing * numIconsOnPage / 2.f + dotSpacing * i + dotSpacing / 2, 0});
         dotBgSpr->setColor({37, 20, 12});
         progressBarBg->addChild(dotBgSpr);
 
-        if (i != 0) {
-            CCSprite* verticalBarBgSpr = CCSprite::createWithSpriteFrameName("whiteSquare20_001.png");  // the vertical gray bars that connect the icons with the dots
-            verticalBarBgSpr->setID("vertical-bar-sprite-" + std::to_string(i));
+        CCSprite* verticalBarBgSpr = CCSprite::createWithSpriteFrameName("whiteSquare20_001.png");  // the vertical gray bars that connect the icons with the dots
+        verticalBarBgSpr->setID("vertical-bar-sprite-" + std::to_string(i));
 
-            if (i % 2 == 0) {  // alternate the vertical bars above and below
-                verticalBarBgSpr->setAnchorPoint({0.5f, 1});
-                verticalBarBgSpr->setPosition({-dotSpacing * numIconsOnPage / 2.f + dotSpacing * i, -10.f});
-            } else {
-                verticalBarBgSpr->setAnchorPoint({0.5f, 0});
-                verticalBarBgSpr->setPosition({-dotSpacing * numIconsOnPage / 2.f + dotSpacing * i, 10.f});
-            }
-
-            verticalBarBgSpr->setScaleX(0.1f);
-            verticalBarBgSpr->setScaleY(1.5f);
-            verticalBarBgSpr->setColor({37, 20, 12});
-            verticalBarBgSpr->setOpacity(50);
-            progressBarBg->addChild(verticalBarBgSpr);
+        if (i % 2 == 0) {  // alternate the vertical bars above and below
+            verticalBarBgSpr->setAnchorPoint({0.5f, 0});
+            verticalBarBgSpr->setPosition({-dotSpacing * numIconsOnPage / 2.f + dotSpacing * i + dotSpacing / 2, 10.f});
+        } else {
+            verticalBarBgSpr->setAnchorPoint({0.5f, 1});
+            verticalBarBgSpr->setPosition({-dotSpacing * numIconsOnPage / 2.f + dotSpacing * i + dotSpacing / 2, -10.f});
         }
+
+        verticalBarBgSpr->setScaleX(0.1f);
+        verticalBarBgSpr->setScaleY(1.5f);
+        verticalBarBgSpr->setColor({37, 20, 12});
+        verticalBarBgSpr->setOpacity(50);
+        progressBarBg->addChild(verticalBarBgSpr);
     }
 
     // Fill (player color or white)
@@ -319,36 +332,25 @@ cocos2d::CCNode* ShardPopup::createPage(int pageNum) {
         }
     }
 
-    for (int i = 0; i <= numAchievementsUnlocked; ++i) {
+    for (int i = 0; i < numAchievementsUnlocked; ++i) {
         CCSprite* dotFillSpr = CCSprite::create("smallDot.png");  // the colored dots that mark the reached unlock points
         dotFillSpr->setID("dot-fill-sprite-" + std::to_string(i));
-        dotFillSpr->setPosition({-dotSpacing * numIconsOnPage / 2.f + dotSpacing * i, 0});
+        dotFillSpr->setPosition({-dotSpacing * numIconsOnPage / 2.f + dotSpacing * i + dotSpacing / 2, 0});
         dotFillSpr->setColor(usePlayerColors ? gameManager->colorForIdx(gameManager->getPlayerColor()) : ccc3(255, 255, 255));
         dotFillSpr->setScale(0.7f);
         progressBarFill->addChild(dotFillSpr);
     }
 
-    for (int i = 0; i < numDotsOnPage - 1; ++i) {
-        Achievement* currAchievement = m_category->achievements[i + pageNum * m_maxIconsPerPage];
+    float ratio = std::min(1.f, float(gameStatsManager->getStat(std::to_string(pageNum + 30).c_str())) / 1000);
 
-        float ratio;
-        if (i == 0)
-            ratio = std::min(1.f, float(progress) / currAchievement->unlockValue);
-        else
-            ratio = std::min(1.f, float(progress - m_category->achievements[i - 1 + pageNum * m_maxIconsPerPage]->unlockValue) / (currAchievement->unlockValue - m_category->achievements[i - 1 + pageNum * m_maxIconsPerPage]->unlockValue));
-
-        if (ratio < 0.f) break;
-
-        CCSprite* fillSpr = CCSprite::createWithSpriteFrameName("whiteSquare20_001.png");  // the colored bar that fills up to the next unlock point and marks the progress
-        fillSpr->setID("progress-bar-fill-sprite-" + std::to_string(i));
-        fillSpr->setAnchorPoint({0, 0.5f});
-        fillSpr->setPosition({-dotSpacing * numIconsOnPage / 2.f + dotSpacing * i, 0});
-        fillSpr->setColor(usePlayerColors ? gameManager->colorForIdx(gameManager->getPlayerColor()) : ccc3(255, 255, 255));
-        fillSpr->setScaleX(dotSpacing / 10 * ratio);
-        fillSpr->setScaleY(0.2f);
-
-        progressBarFill->addChild(fillSpr);
-    }
+    CCSprite* fillSpr = CCSprite::createWithSpriteFrameName("whiteSquare20_001.png");  // the colored bar that fills up to the next unlock point and marks the progress
+    fillSpr->setID("progress-bar-fill-sprite");
+    fillSpr->setAnchorPoint({0, 0.5f});
+    fillSpr->setPosition({-dotSpacing * numIconsOnPage / 2.f + dotSpacing / 2, 0});
+    fillSpr->setColor(usePlayerColors ? gameManager->colorForIdx(gameManager->getPlayerColor()) : ccc3(255, 255, 255));
+    fillSpr->setScaleX(dotSpacing * ratio);
+    fillSpr->setScaleY(0.2f);
+    progressBarFill->addChild(fillSpr);
 
     /* Player Sprites */
     CCMenu* playerMenu = CCMenu::create();
@@ -356,7 +358,6 @@ cocos2d::CCNode* ShardPopup::createPage(int pageNum) {
     playerMenu->setPosition(progressBar->getPosition());
     page->addChild(playerMenu);
 
-    const int unlockValues[] = {5, 15, 35, 65, 100};
     for (int i = 0; i < numIconsOnPage; ++i) {
         Achievement* currAchievement = m_category->achievements[i + pageNum * m_maxIconsPerPage];
 
@@ -367,7 +368,7 @@ cocos2d::CCNode* ShardPopup::createPage(int pageNum) {
         lock->setZOrder(1);
 
         // Create the text that shows how much is needed to unlock
-        CCLabelBMFont* unlockValue = CCLabelBMFont::create(formatWithCommas(unlockValues[i]).c_str(), "bigFont.fnt");
+        CCLabelBMFont* unlockValue = CCLabelBMFont::create(formatWithCommas(i * 100).c_str(), "bigFont.fnt");
         unlockValue->setID("unlock-text-" + std::to_string(i));
         unlockValue->setScale(.25f);
 
@@ -403,15 +404,15 @@ cocos2d::CCNode* ShardPopup::createPage(int pageNum) {
         CCMenuItemSpriteExtra* unlockButton = CCMenuItemSpriteExtra::create(
             unlockItem,
             this,
-            menu_selector(ShardPopup::onIcon));
+            menu_selector(PathPopup::onIcon));
 
         // This is for the callback function
-        IconCallbackData* data = new IconCallbackData(currAchievement->unlockType, currAchievement->unlockID);
+        IconCallbackData* data = new IconCallbackData(currAchievement->unlockType, currAchievement->unlockID, currAchievement->achievedDescription);
         data->autorelease();
         unlockButton->setUserObject(data);
 
         unlockButton->setID("unlock-sprite-" + std::to_string(i));
-        unlockButton->setPosition({-dotSpacing * numIconsOnPage / 2.f + dotSpacing * (i + 1), (i % 2 == 0) ? 40.f : -40.f});
+        unlockButton->setPosition({-dotSpacing * numIconsOnPage / 2.f + dotSpacing * i + dotSpacing / 2, (i % 2 == 0) ? 40.f : -40.f});
         unlockButton->m_baseScale = 0.7f;
         unlockButton->setScale(0.7f);
         playerMenu->addChild(unlockButton);

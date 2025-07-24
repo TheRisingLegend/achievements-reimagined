@@ -121,7 +121,7 @@ CCNode* ProgressPopup::createPage(int pageNum) {
             menu_selector(ProgressPopup::onIcon));
 
         // This is for the callback function
-        IconCallbackData* data = new IconCallbackData(currAchievement->unlockType, currAchievement->unlockID);
+        IconCallbackData* data = new IconCallbackData(currAchievement->unlockType, currAchievement->unlockID, currAchievement->achievedDescription);
         data->autorelease();
         unlockButton->setUserObject(data);
 

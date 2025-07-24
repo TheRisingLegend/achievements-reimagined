@@ -174,7 +174,7 @@ CCNode* DistinctPopup::createPage(int pageNum) {
             menu_selector(DistinctPopup::onIcon));
 
         // This is for the callback function
-        IconCallbackData* data = new IconCallbackData(currAchievement->unlockType, currAchievement->unlockID);
+        IconCallbackData* data = new IconCallbackData(currAchievement->unlockType, currAchievement->unlockID, currAchievement->achievedDescription);
         data->autorelease();
         unlockButton->setUserObject(data);
 

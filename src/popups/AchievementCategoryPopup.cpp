@@ -1,6 +1,6 @@
 #include "AchievementCategoryPopup.hpp"
 
-#include "AchievementMenu.hpp"
+#include "../AchievementMenu.hpp"
 
 using namespace geode::prelude;
 
@@ -159,13 +159,19 @@ void AchievementCategoryPopup::onIcon(CCObject* sender) {
     ItemInfoPopup* popup = ItemInfoPopup::create(data->unlockID, data->unlockType);
     popup->show();
 
+    if (!popup) return;  // popup creation failed
+
+    // TextArea* description = typeinfo_cast<TextArea*>(popup->m_mainLayer->getChildByID("description-area"));
+    // if (!description) return;
+
+    // if (gameManager->isIconUnlocked(data->unlockID, gameManager->unlockTypeToIconType(static_cast<int>(data->unlockType))))
+    //     description->setString(data->unlockedDescription);
+
     std::vector<UnlockType> playerUnlockTypes = {UnlockType::Cube, UnlockType::Ship, UnlockType::Ball, UnlockType::Bird, UnlockType::Dart, UnlockType::Robot, UnlockType::Spider, UnlockType::Swing};
 
     if (std::find(playerUnlockTypes.begin(), playerUnlockTypes.end(), data->unlockType) == playerUnlockTypes.end()) return;  // is not a player icon
 
     if (!Mod::get()->getSettingValue<bool>("use-player-colors")) return;  // use player colors setting is off
-
-    if (!popup) return;  // popup creation failed
 
     auto mainLayer = dynamic_cast<CCLayer*>(popup->getChildByID("main-layer"));
     if (!mainLayer) return;

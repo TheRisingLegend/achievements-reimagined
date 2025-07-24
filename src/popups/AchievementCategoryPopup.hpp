@@ -3,7 +3,7 @@
 
 #include <Geode/Geode.hpp>
 
-#include "utils.hpp"
+#include "../utils.hpp"
 
 class AchievementMenu;
 class AchievementCategoryPopup : public geode::Popup<AchievementMenu*, Category*> {
