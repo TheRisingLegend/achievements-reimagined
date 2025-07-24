@@ -1,9 +1,9 @@
 #include "AchievementMenu.hpp"
 
-#include "DistinctPopup.hpp"
-#include "PathPopup.hpp"
-#include "ProgressPopup.hpp"
-#include "ShardPopup.hpp"
+#include "popups/DistinctPopup.hpp"
+#include "popups/PathPopup.hpp"
+#include "popups/ProgressPopup.hpp"
+#include "popups/ShardPopup.hpp"
 
 using namespace geode::prelude;
 
@@ -12,16 +12,16 @@ bool AchievementMenu::setup() {
 
     m_achievementCategories = {
         // Levels
-        {"Main Levels", "Main Levels", "Levels", "distinct", "GJ_playBtn_001.png", {"level##a", "level##b", "demoncoin##", "special##"}},
-        {"Tower Levels", "Tower Levels", "Levels", "distinct", "theTower_01_001.png", {"tower##", "tower##Coin"}},
-        {"User Levels", "User Levels", "Levels", "progress", "GJ_creatorBtn_001.png", {"custom##"}, "4"},
+        {"Main Levels", "Main\nLevels", "Levels", "distinct", "GJ_playBtn_001.png", {"level##a", "level##b", "demoncoin##", "special##"}},
+        {"Tower Levels", "Tower\nLevels", "Levels", "distinct", "theTower_01_001.png", {"tower##", "tower##Coin"}},
+        {"User Levels", "User\nLevels", "Levels", "progress", "GJ_creatorBtn_001.png", {"custom##"}, "4"},
         {"Meltdown", "Meltdown", "Levels", "distinct", "GJ_md_001.png", {"mdlevel##b", "mdcoin##", "mdrate"}},
         {"World", "World", "Levels", "distinct", "gj_worldLogo_001.png", {"world"}},
         {"Subzero", "Subzero", "Levels", "distinct", "gj_subzeroLogo_001.png", {"subzero"}},
         {"Demons", "Demons", "Levels", "progress", "diffIcon_06_btn_001.png", {"demon##"}, "5"},
         {"Insanes", "Insanes", "Levels", "progress", "diffIcon_05_btn_001.png", {"insane##"}, "42"},
-        {"Daily Levels", "Daily Levels", "Levels", "progress", "gj_dailyCrown_001.png", {"daily##"}, "15"},
-        {"Map Packs", "Map Packs", "Levels", "progress", "GJ_mapPacksBtn_001.png", {"mappacks##"}, "7"},
+        {"Daily Levels", "Daily\nLevels", "Levels", "progress", "gj_dailyCrown_001.png", {"daily##"}, "15"},
+        {"Map Packs", "Map\nPacks", "Levels", "progress", "GJ_mapPacksBtn_001.png", {"mappacks##"}, "7"},
         {"Gauntlets", "Gauntlets", "Levels", "progress", "GJ_gauntletsBtn_001.png", {"gauntlets##"}, "40"},
         {"Lists", "Lists", "Levels", "progress", "topListsLabel_001.png", {"lists##"}, "41"},
 
@@ -29,16 +29,16 @@ bool AchievementMenu::setup() {
         {"Stars", "Stars", "Stats", "progress", "GJ_bigStar_noShadow_001.png", {"stars##"}, "6"},
         {"Moons", "Moons", "Stats", "progress", "GJ_bigMoon_noShadow_001.png", {"moons##"}, "28"},
         {"Diamonds", "Diamonds", "Stats", "progress", "GJ_bigDiamond_noShadow_001.png", {"diamonds##"}, "13"},
-        {"Secret Coins", "Secret Coins", "Stats", "progress", "secretCoinUI_001.png", {"coins##"}, "8"},
-        {"User Coins", "User Coins", "Stats", "progress", "secretCoinUI2_001.png", {"usercoins##"}, "12"},
+        {"Secret Coins", "Secret\nCoins", "Stats", "progress", "secretCoinUI_001.png", {"coins##"}, "8"},
+        {"User Coins", "User\nCoins", "Stats", "progress", "secretCoinUI2_001.png", {"usercoins##"}, "12"},
         {"Jumps", "Jumps", "Stats", "progress", "PBtn_Jump_001.png", {"jump##"}, "1"},
         {"Attempts", "Attempts", "Stats", "progress", "GJ_playBtn2_001.png", {"attempt##"}, "2"},
         {"Shards", "Shards", "Stats", "shard", "bonusShardSmall_001.png", {}},
         {"Paths", "Paths", "Stats", "path", "GJ_pathsBtn_001.png", {}},
 
         // Social
-        {"Liked/Disliked Levels", "Liked/Disliked\nLevels", "Social", "progress", "GJ_like2Btn_001.png", {"like", "like##", "like##b"}, "10"},
-        {"Rated Levels", "Rated Levels", "Social", "progress", "GJ_starBtn_001.png", {"rateDiff", "rateDiff##", "rateDiff##b"}, "11"},
+        {"Liked/Disliked Levels", "Liked /\nDisliked\nLevels", "Social", "progress", "GJ_like2Btn_001.png", {"like", "like##", "like##b"}, "10"},
+        {"Rated Levels", "Rated\nLevels", "Social", "progress", "GJ_starBtn_001.png", {"rateDiff", "rateDiff##", "rateDiff##b"}, "11"},
         {"Followed Creators", "Followed\nCreators", "Social", "progress", "gj_heartOn_001.png", {"followCreator", "followCreator##"}},
         {"Friends", "Friends", "Social", "distinct", "GJ_sFriendsIcon_001.png", {"friends##"}},
 
@@ -138,7 +138,7 @@ void AchievementMenu::createCategoryMenu() {
 
         auto buttonMenu = CCMenu::create();
         buttonMenu->setID("categories-menu");
-        buttonMenu->setContentSize({m_mainLayer->getContentWidth() - 100, m_mainLayer->getContentHeight() - 70.f});
+        buttonMenu->setContentSize({m_mainLayer->getContentWidth() - 70, m_mainLayer->getContentHeight() - 70.f});
         buttonMenu->setPosition({m_mainLayer->getContentWidth() / 2, m_mainLayer->getContentHeight() / 2 - 13.f});
         buttonMenu->setLayout(RowLayout::create()
                                   ->setGap(12.f)
@@ -158,18 +158,23 @@ void AchievementMenu::addCategoryButtons(CCMenu* menuPage, std::string pageTitle
     for (int i = 0; i < m_achievementCategories.size(); i++) {
         if (m_achievementCategories[i].page != pageTitle) continue;
 
-        ButtonSprite* buttonSprite = ButtonSprite::create(m_achievementCategories[i].formattedName.c_str(), 90.f, true, "bigFont.fnt", "GJ_button_01.png", 40.f, 0.5f);
+        ButtonSprite* buttonSprite = ButtonSprite::create(m_achievementCategories[i].formattedName.c_str(), 90.f, true, "bigFont.fnt", "GJ_button_01.png", 40.f, 0.35f);
 
-        // CCSprite* logo = CCSprite::createWithSpriteFrameName(m_achievementCategories[i].logo.c_str());
-        // if (!logo) {
-        //     log::error("Failed to load logo for category: {}", m_achievementCategories[i].name);
-        // } else {
-        //     logo->setID("logo");
-        //     logo->setScale(std::min(25.f / logo->getContentWidth(), 25.f / logo->getContentHeight()));
-        //     logo->setPosition({buttonSprite->getContentWidth() / 2, 0});
-        //     logo->setZOrder(1);
-        //     buttonSprite->addChild(logo);
-        // }
+        CCSprite* logo = CCSprite::createWithSpriteFrameName(m_achievementCategories[i].logo.c_str());
+        if (!logo) {
+            log::error("Failed to load logo for category: {}", m_achievementCategories[i].name);
+        } else {
+            logo->setID("logo");
+            logo->setAnchorPoint({0.5f, 0.5f});
+            logo->setScale(std::min(20.f / logo->getContentWidth(), 20.f / logo->getContentHeight()));
+            logo->setPosition({std::min(20.f, logo->getContentWidth() / 2 * logo->getScale() + 15.f), buttonSprite->getContentHeight() / 2});
+            logo->setZOrder(1);
+            buttonSprite->addChild(logo);
+        }
+
+        // slide over the text if needed to make room for the logo
+        // buttonSprite->m_label->setPositionX(std::max(buttonSprite->m_label->getPositionX(), buttonSprite->m_label->getContentWidth() / 2 * buttonSprite->m_label->getScale() + logo->getContentWidth() / 2 * logo->getScale() + logo->getPositionX()));
+        buttonSprite->m_label->setPositionX(buttonSprite->m_label->getContentWidth() / 2 * buttonSprite->m_label->getScale() + logo->getContentWidth() / 2 * logo->getScale() + logo->getPositionX() + 10.f);
 
         if (!Mod::get()->getSettingValue<bool>("hide-category-checkmarks")) {
             CCSprite* checkmark = CCSprite::createWithSpriteFrameName("GJ_completesIcon_001.png");
