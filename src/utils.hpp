@@ -27,8 +27,9 @@ struct Category {
 struct IconCallbackData : public cocos2d::CCObject {
     UnlockType unlockType;
     int unlockID;
+    std::string unlockedDescription;
 
-    IconCallbackData(UnlockType type, int id) : unlockType(type), unlockID(id) {}
+    IconCallbackData(UnlockType type, int id, std::string desc) : unlockType(type), unlockID(id), unlockedDescription(desc) {}
 };
 
 extern std::map<std::string, std::tuple<std::string, std::string>> betterDescriptions;
