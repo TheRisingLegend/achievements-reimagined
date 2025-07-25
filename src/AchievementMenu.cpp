@@ -12,43 +12,43 @@ bool AchievementMenu::setup() {
 
     m_achievementCategories = {
         // Levels
-        {"Main Levels", "Main\nLevels", "Levels", "distinct", "GJ_playBtn_001.png", {"level##a", "level##b", "demoncoin##", "special##"}},
+        {"Main Levels", "Main\nLevels", "Levels", "distinct", "main_levels.png"_spr, {"level##a", "level##b", "demoncoin##", "special##"}},
         {"Tower Levels", "Tower\nLevels", "Levels", "distinct", "theTower_01_001.png", {"tower##", "tower##Coin"}},
-        {"User Levels", "User\nLevels", "Levels", "progress", "GJ_creatorBtn_001.png", {"custom##"}, "4"},
-        {"Meltdown", "Meltdown", "Levels", "distinct", "GJ_md_001.png", {"mdlevel##b", "mdcoin##", "mdrate"}},
-        {"World", "World", "Levels", "distinct", "gj_worldLogo_001.png", {"world"}},
-        {"Subzero", "Subzero", "Levels", "distinct", "gj_subzeroLogo_001.png", {"subzero"}},
-        {"Demons", "Demons", "Levels", "progress", "diffIcon_06_btn_001.png", {"demon##"}, "5"},
-        {"Insanes", "Insanes", "Levels", "progress", "diffIcon_05_btn_001.png", {"insane##"}, "42"},
-        {"Daily Levels", "Daily\nLevels", "Levels", "progress", "gj_dailyCrown_001.png", {"daily##"}, "15"},
-        {"Map Packs", "Map\nPacks", "Levels", "progress", "GJ_mapPacksBtn_001.png", {"mappacks##"}, "7"},
-        {"Gauntlets", "Gauntlets", "Levels", "progress", "GJ_gauntletsBtn_001.png", {"gauntlets##"}, "40"},
-        {"Lists", "Lists", "Levels", "progress", "topListsLabel_001.png", {"lists##"}, "41"},
+        {"User Levels", "User\nLevels", "Levels", "progress", "user_levels.png"_spr, {"custom##"}, "4"},
+        {"Meltdown", "Meltdown", "Levels", "distinct", "meltdown.png"_spr, {"mdlevel##b", "mdcoin##", "mdrate"}},
+        {"World", "World", "Levels", "distinct", "world.png"_spr, {"world"}},
+        {"Subzero", "Subzero", "Levels", "distinct", "subzero.png"_spr, {"subzero"}},
+        {"Demons", "Demons", "Levels", "progress", "demon.png"_spr, {"demon##"}, "5"},
+        {"Insanes", "Insanes", "Levels", "progress", "insane.png"_spr, {"insane##"}, "42"},
+        {"Daily Levels", "Daily\nLevels", "Levels", "progress", "daily.png"_spr, {"daily##"}, "15"},
+        {"Map Packs", "Map\nPacks", "Levels", "progress", "map_packs.png"_spr, {"mappacks##"}, "7"},
+        {"Gauntlets", "Gauntlets", "Levels", "progress", "gauntlets.png"_spr, {"gauntlets##"}, "40"},
+        {"Lists", "Lists", "Levels", "progress", "lists.png"_spr, {"lists##"}, "41"},
 
         // Stats
         {"Stars", "Stars", "Stats", "progress", "GJ_bigStar_noShadow_001.png", {"stars##"}, "6"},
         {"Moons", "Moons", "Stats", "progress", "GJ_bigMoon_noShadow_001.png", {"moons##"}, "28"},
         {"Diamonds", "Diamonds", "Stats", "progress", "GJ_bigDiamond_noShadow_001.png", {"diamonds##"}, "13"},
-        {"Secret Coins", "Secret\nCoins", "Stats", "progress", "secretCoinUI_001.png", {"coins##"}, "8"},
-        {"User Coins", "User\nCoins", "Stats", "progress", "secretCoinUI2_001.png", {"usercoins##"}, "12"},
-        {"Jumps", "Jumps", "Stats", "progress", "PBtn_Jump_001.png", {"jump##"}, "1"},
-        {"Attempts", "Attempts", "Stats", "progress", "GJ_playBtn2_001.png", {"attempt##"}, "2"},
-        {"Shards", "Shards", "Stats", "shard", "bonusShardSmall_001.png", {}},
-        {"Paths", "Paths", "Stats", "path", "GJ_pathsBtn_001.png", {}},
+        {"Secret Coins", "Secret\nCoins", "Stats", "progress", "secretCoin_01_001.png", {"coins##"}, "8"},
+        {"User Coins", "User\nCoins", "Stats", "progress", "secretCoin_2_01_001.png", {"usercoins##"}, "12"},
+        {"Jumps", "Jumps", "Stats", "progress", "jumps.png"_spr, {"jump##"}, "1"},
+        {"Attempts", "Attempts", "Stats", "progress", "attempts.png"_spr, {"attempt##"}, "2"},
+        {"Shards", "Shards", "Stats", "shard", "shards.png"_spr, {}},
+        {"Paths", "Paths", "Stats", "path", "paths.png"_spr, {}},
 
         // Social
-        {"Liked/Disliked Levels", "Liked /\nDisliked\nLevels", "Social", "progress", "GJ_like2Btn_001.png", {"like", "like##", "like##b"}, "10"},
-        {"Rated Levels", "Rated\nLevels", "Social", "progress", "GJ_starBtn_001.png", {"rateDiff", "rateDiff##", "rateDiff##b"}, "11"},
-        {"Followed Creators", "Followed\nCreators", "Social", "progress", "gj_heartOn_001.png", {"followCreator", "followCreator##"}},
-        {"Friends", "Friends", "Social", "distinct", "GJ_sFriendsIcon_001.png", {"friends##"}},
+        {"Liked/Disliked Levels", "Liked /\nDisliked\nLevels", "Social", "progress", "like_dislike.png"_spr, {"like", "like##", "like##b"}, "10"},
+        {"Rated Levels", "Rated\nLevels", "Social", "progress", "rate.png"_spr, {"rateDiff", "rateDiff##", "rateDiff##b"}, "11"},
+        {"Followed Creators", "Followed\nCreators", "Social", "progress", "followed_creators.png"_spr, {"followCreator", "followCreator##"}},
+        {"Friends", "Friends", "Social", "distinct", "friends.png"_spr, {"friends##"}},
 
         // Other
         {"Creator", "Creator", "Other", "distinct", "GJ_hammerIcon_001.png", {"creator##", "submit"}},
-        {"Vaults", "Vaults", "Other", "distinct", "secretDoorBtn2_open_001.png", {"v#"}},
-        {"Players Destroyed", "Players\nDestroyed", "Other", "progress", "playerExplosion_01_001.png", {}, "9"},
-        {"Secret", "Secret", "Other", "distinct", "GJ_lock_open_001.png", {"secret##", "secret##b"}},
-        {"Misc", "Misc", "Other", "distinct", "GJ_plusBtn_001.png", {"rate", "moreGames", "facebook", "youtube", "twitter"}},
-        {"Steam Exclusive", "Steam\nExclusive", "Other", "distinct", "secretCoin_2_b_01_001.png", {"steam##"}}};
+        {"Vaults", "Vaults", "Other", "distinct", "vaults.png"_spr, {"v#"}},
+        {"Players Destroyed", "Players\nDestroyed", "Other", "progress", "players_destroyed.png"_spr, {}, "9"},
+        {"Secret", "Secret", "Other", "distinct", "secret.png"_spr, {"secret##", "secret##b"}},
+        {"Misc", "Misc", "Other", "distinct", "misc.png"_spr, {"rate", "moreGames", "facebook", "youtube", "twitter"}},
+        {"Steam Exclusive", "Steam\nExclusive", "Other", "distinct", "steam.png"_spr, {"steam##"}}};
 
     setTitle("Achievements", "goldFont.fnt", 1.0f);
 
@@ -100,7 +100,6 @@ bool AchievementMenu::setup() {
 
     auto SFC = CCSpriteFrameCache::get();
     SFC->addSpriteFramesWithFile("TowerSheet.plist");
-    SFC->addSpriteFramesWithFile("PlayerExplosion_01.plist");
 
     createCategoryMenu();
 
@@ -159,22 +158,40 @@ void AchievementMenu::addCategoryButtons(CCMenu* menuPage, std::string pageTitle
         if (m_achievementCategories[i].page != pageTitle) continue;
 
         ButtonSprite* buttonSprite = ButtonSprite::create(m_achievementCategories[i].formattedName.c_str(), 90.f, true, "bigFont.fnt", "GJ_button_01.png", 40.f, 0.35f);
+        buttonSprite->m_label->setPositionX(buttonSprite->m_label->getContentWidth() / 2 * buttonSprite->m_label->getScale() + 37.f);  // slide over the text to make room for the logo
 
-        CCSprite* logo = CCSprite::createWithSpriteFrameName(m_achievementCategories[i].logo.c_str());
+        CCSprite* logo = CCSprite::createWithSpriteFrameName(m_achievementCategories[i].logo.c_str());  // try from spritesheet
+        if (!logo) logo = CCSprite::create(m_achievementCategories[i].logo.c_str());                    // otherwise try mod resources from logos/
+
         if (!logo) {
             log::error("Failed to load logo for category: {}", m_achievementCategories[i].name);
         } else {
             logo->setID("logo");
             logo->setAnchorPoint({0.5f, 0.5f});
             logo->setScale(std::min(20.f / logo->getContentWidth(), 20.f / logo->getContentHeight()));
-            logo->setPosition({std::min(20.f, logo->getContentWidth() / 2 * logo->getScale() + 15.f), buttonSprite->getContentHeight() / 2});
+            logo->setPosition({20.f, buttonSprite->getContentHeight() / 2});
             logo->setZOrder(1);
             buttonSprite->addChild(logo);
-        }
 
-        // slide over the text if needed to make room for the logo
-        // buttonSprite->m_label->setPositionX(std::max(buttonSprite->m_label->getPositionX(), buttonSprite->m_label->getContentWidth() / 2 * buttonSprite->m_label->getScale() + logo->getContentWidth() / 2 * logo->getScale() + logo->getPositionX()));
-        buttonSprite->m_label->setPositionX(buttonSprite->m_label->getContentWidth() / 2 * buttonSprite->m_label->getScale() + logo->getContentWidth() / 2 * logo->getScale() + logo->getPositionX() + 10.f);
+            if (m_achievementCategories[i].name == "Jumps") {
+                GJItemIcon* jumpingIcon = GJItemIcon::create(UnlockType::Cube, gameManager->getPlayerFrame(), gameManager->colorForIdx(gameManager->getPlayerColor()), gameManager->colorForIdx(gameManager->getPlayerColor2()), true, false, false, gameManager->colorForIdx(gameManager->getPlayerGlowColor()));
+
+                // Jank way to set glow cause not sure how to do that in the above create
+                CCObject* child;
+                if (gameManager->m_playerGlow) {
+                    CCObject* child;
+                    CCARRAY_FOREACH(jumpingIcon->getChildren(), child) {
+                        if (auto spr = typeinfo_cast<SimplePlayer*>(child)) {
+                            spr->setGlowOutline(gameManager->colorForIdx(gameManager->getPlayerGlowColor()));
+                        }
+                    }
+                }
+
+                jumpingIcon->setRotation(50.f);
+                jumpingIcon->setPosition({40, 60});
+                logo->addChild(jumpingIcon);
+            }
+        }
 
         if (!Mod::get()->getSettingValue<bool>("hide-category-checkmarks")) {
             CCSprite* checkmark = CCSprite::createWithSpriteFrameName("GJ_completesIcon_001.png");
