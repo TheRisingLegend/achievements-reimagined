@@ -34,12 +34,6 @@
 		}
 	},
 	"settings": {
-        "use-player-colors": {
-            "name": "Use Player Colors",
-            "description": "Use your player colors for progress bars and icons.",
-            "type": "bool",
-            "default": true
-        },
 		"show-secrets": {
 			"name": "Show Secrets",
 			"description": "Use descriptions that reveal how to complete secret achievements, such as vault codes.",
@@ -47,6 +41,18 @@
 			"default": false,
 			"requires-restart": true
 		},
+		"show_uncompleted_first":{
+			"name": "Show Uncompleted Achievements First",
+			"description": "Show uncompleted achievements first in the list, then completed ones. (Does not apply to categories that use a progress bar)",
+			"type": "bool",
+			"default": false
+		},
+        "use-player-colors": {
+            "name": "Use Player Colors",
+            "description": "Use your player colors for progress bars and icons.",
+            "type": "bool",
+            "default": true
+        },
 		"all-discrete": {
 			"name": "No Progress Bars",
 			"description": "Show all achievements with their own boxes instead of combining into a progress bar when possible. (Not recommended but you have free will so...)",

@@ -34,6 +34,14 @@ bool DistinctPopup::setup(AchievementMenu* achievementMenu, Category* category) 
         });
     }
 
+    if (Mod::get()->getSettingValue<bool>("show_uncompleted_first")) {
+        std::stable_sort(m_category->achievements.begin(), m_category->achievements.end(), [](Achievement* a, Achievement* b) {
+            bool aEarned = achievementManager->isAchievementEarned(a->id.c_str());
+            bool bEarned = achievementManager->isAchievementEarned(b->id.c_str());
+            return !aEarned && bEarned;
+        });
+    }
+
     createTitle();
 
     // Progress percent and fraction
