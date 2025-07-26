@@ -13,7 +13,7 @@ bool AchievementMenu::setup() {
     m_achievementCategories = {
         // Levels
         {"Main Levels", "Main\nLevels", "Levels", "distinct", "main_levels.png"_spr, {"level##a", "level##b", "demoncoin##", "special##"}},
-        {"Tower Levels", "Tower\nLevels", "Levels", "distinct", "theTowerDoor_001.png", {"tower##", "tower##Coin"}},
+        {"Tower Levels", "Tower\nLevels", "Levels", "distinct", "tower_levels.png"_spr, {"tower##", "tower##Coin"}},
         {"User Levels", "User\nLevels", "Levels", "progress", "user_levels.png"_spr, {"custom##"}, "4"},
         {"Meltdown", "Meltdown", "Levels", "distinct", "meltdown.png"_spr, {"mdlevel##b", "mdcoin##", "mdrate"}},
         {"World", "World", "Levels", "distinct", "world.png"_spr, {"world"}},
