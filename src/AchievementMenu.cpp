@@ -13,7 +13,7 @@ bool AchievementMenu::setup() {
     m_achievementCategories = {
         // Levels
         {"Main Levels", "Main\nLevels", "Levels", "distinct", "main_levels.png"_spr, {"level##a", "level##b", "demoncoin##", "special##"}},
-        {"Tower Levels", "Tower\nLevels", "Levels", "distinct", "theTower_01_001.png", {"tower##", "tower##Coin"}},
+        {"Tower Levels", "Tower\nLevels", "Levels", "distinct", "theTowerDoor_001.png", {"tower##", "tower##Coin"}},
         {"User Levels", "User\nLevels", "Levels", "progress", "user_levels.png"_spr, {"custom##"}, "4"},
         {"Meltdown", "Meltdown", "Levels", "distinct", "meltdown.png"_spr, {"mdlevel##b", "mdcoin##", "mdrate"}},
         {"World", "World", "Levels", "distinct", "world.png"_spr, {"world"}},
@@ -131,14 +131,14 @@ void AchievementMenu::createCategoryMenu() {
 
         auto subTitle = CCLabelBMFont::create(pageTitles[i].c_str(), "bigFont.fnt");
         subTitle->setID("page-subtitle");
-        subTitle->setScale(0.6f);
-        subTitle->setPosition({menuPage->getContentWidth() / 2, 235});
+        subTitle->setScale(0.5f);
+        subTitle->setPosition({menuPage->getContentWidth() / 2, 240});
         menuPage->addChild(subTitle);
 
         auto buttonMenu = CCMenu::create();
         buttonMenu->setID("categories-menu");
         buttonMenu->setContentSize({m_mainLayer->getContentWidth() - 70, m_mainLayer->getContentHeight() - 70.f});
-        buttonMenu->setPosition({m_mainLayer->getContentWidth() / 2, m_mainLayer->getContentHeight() / 2 - 13.f});
+        buttonMenu->setPosition({m_mainLayer->getContentWidth() / 2, m_mainLayer->getContentHeight() / 2 - 8.f});
         buttonMenu->setLayout(RowLayout::create()
                                   ->setGap(12.f)
                                   ->setAxisAlignment(AxisAlignment::Center)
@@ -158,8 +158,12 @@ void AchievementMenu::addCategoryButtons(CCMenu* menuPage, std::string pageTitle
         if (m_achievementCategories[i].page != pageTitle) continue;
 
         ButtonSprite* buttonSprite = ButtonSprite::create(m_achievementCategories[i].formattedName.c_str(), 90.f, true, "bigFont.fnt", "GJ_button_01.png", 40.f, 0.35f);
-        buttonSprite->m_label->setPositionX(buttonSprite->m_label->getContentWidth() / 2 * buttonSprite->m_label->getScale() + 37.f);  // slide over the text to make room for the logo
 
+        // slide over the text to make room for the logo
+        buttonSprite->m_label->setPositionX(buttonSprite->m_label->getContentWidth() / 2 * buttonSprite->m_label->getScale() + 37.f);
+        buttonSprite->m_label->setPositionY(buttonSprite->m_label->getPositionY() - 1.f);
+
+        // The little logo on the left side of the button
         CCSprite* logo = CCSprite::createWithSpriteFrameName(m_achievementCategories[i].logo.c_str());  // try from spritesheet
         if (!logo) logo = CCSprite::create(m_achievementCategories[i].logo.c_str());                    // otherwise try mod resources from logos/
 
@@ -193,6 +197,7 @@ void AchievementMenu::addCategoryButtons(CCMenu* menuPage, std::string pageTitle
             }
         }
 
+        // Checkmark for completed categories, if enabled
         if (!Mod::get()->getSettingValue<bool>("hide-category-checkmarks")) {
             CCSprite* checkmark = CCSprite::createWithSpriteFrameName("GJ_completesIcon_001.png");
             checkmark->setID("checkmark");
