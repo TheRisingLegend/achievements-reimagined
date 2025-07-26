@@ -1,5 +1,5 @@
 {
-	"geode": "4.6.3",
+	"geode": "4.7.0",
 	"gd": {
 		"win": "2.2074",
 		"android": "2.2074",
@@ -8,7 +8,7 @@
 	},
 	"id": "therisinglegend.achievements_reimagined",
 	"name": "Achievements Reimagined",
-	"version": "v1.2.1",
+	"version": "v1.3.0",
 	"developer": "TheRisingLegend",
 	"description": "Completely remakes the achievements menu!",
 	"links": {

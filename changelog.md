@@ -1,3 +1,8 @@
+# 1.3.0
+
+- Added icons to the category buttons
+- Added setting to show uncompleted achievements first for the box layout
+
 # 1.2.1
 
 - Progress bars now scale to better fill the whole page
