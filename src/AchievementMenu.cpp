@@ -164,8 +164,13 @@ void AchievementMenu::addCategoryButtons(CCMenu* menuPage, std::string pageTitle
         buttonSprite->m_label->setPositionY(buttonSprite->m_label->getPositionY() - 1.f);
 
         // The little logo on the left side of the button
-        CCSprite* logo = CCSprite::createWithSpriteFrameName(m_achievementCategories[i].logo.c_str());  // try from spritesheet
-        if (!logo) logo = CCSprite::create(m_achievementCategories[i].logo.c_str());                    // otherwise try mod resources from logos/
+        const std::vector<std::string> fromSpritesheet = {"Stars", "Moons", "Diamonds", "Secret Coins", "User Coins", "Creator"};
+
+        CCSprite* logo;
+        if (std::find(fromSpritesheet.begin(), fromSpritesheet.end(), m_achievementCategories[i].name) != fromSpritesheet.end())
+            logo = CCSprite::createWithSpriteFrameName(m_achievementCategories[i].logo.c_str());  // try from spritesheet
+        else
+            logo = CCSprite::create(m_achievementCategories[i].logo.c_str());  // otherwise try mod resources from logos/
 
         if (!logo) {
             log::error("Failed to load logo for category: {}", m_achievementCategories[i].name);
