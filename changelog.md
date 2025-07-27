@@ -1,3 +1,7 @@
+# 1.3.1
+
+- Fixed bug with loading category icons
+
 # 1.3.0
 
 - Added icons to the category buttons
