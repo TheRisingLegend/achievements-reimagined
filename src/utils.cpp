@@ -67,10 +67,12 @@ std::string formatWithCommas(int number) {
 
 // entry condition: description is from achievement that is part of a progress category
 int extractValue(const std::string& desc) {
-    std::regex numberRegex(R"((\d+))");
+    std::regex numberRegex(R"((\d{1,3}(,\d{3})*|\d+))");
     std::smatch match;
     if (std::regex_search(desc, match, numberRegex)) {
-        return std::stoi(match[1].str());
+        std::string valueStr = match[1].str();
+        valueStr.erase(std::remove(valueStr.begin(), valueStr.end(), ','), valueStr.end());
+        return std::stoi(valueStr);
     }
     return 1;
 }
