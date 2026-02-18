@@ -7,7 +7,7 @@
 
 class ProgressPopup : public AchievementCategoryPopup {
    protected:
-    bool setup(AchievementMenu* achievementMenu, Category* category) override;
+    bool init(AchievementMenu* achievementMenu, Category* category);
 
    public:
     static ProgressPopup* create(AchievementMenu* achievementMenu, Category* category);

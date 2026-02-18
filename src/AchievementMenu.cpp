@@ -7,7 +7,10 @@
 
 using namespace geode::prelude;
 
-bool AchievementMenu::setup() {
+bool AchievementMenu::init() {
+    if (!Popup::init(450.f, 280.f))
+        return false;
+
     m_achievementManager = AchievementManager::sharedState();
 
     m_achievementCategories = {
@@ -110,7 +113,7 @@ bool AchievementMenu::setup() {
 
 AchievementMenu* AchievementMenu::create() {
     auto popup = new AchievementMenu();
-    if (popup && popup->initAnchored(450.f, 280.f)) {
+    if (popup && popup->init()) {
         popup->autorelease();
         return popup;
     }
@@ -189,7 +192,7 @@ void AchievementMenu::addCategoryButtons(CCMenu* menuPage, std::string pageTitle
                 CCObject* child;
                 if (gameManager->m_playerGlow) {
                     CCObject* child;
-                    CCARRAY_FOREACH(jumpingIcon->getChildren(), child) {
+                    for (auto child : CCArrayExt(jumpingIcon->getChildren())) {
                         if (auto spr = typeinfo_cast<SimplePlayer*>(child)) {
                             spr->setGlowOutline(gameManager->colorForIdx(gameManager->getPlayerGlowColor()));
                         }

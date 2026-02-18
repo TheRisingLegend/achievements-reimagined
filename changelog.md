@@ -1,3 +1,7 @@
+# 1.3.2
+
+- Port to 2.2081
+
 # 1.3.1
 
 - Fixed bug with loading category icons

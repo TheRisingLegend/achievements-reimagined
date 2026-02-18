@@ -6,7 +6,7 @@
 #include "../utils.hpp"
 
 class AchievementMenu;
-class AchievementCategoryPopup : public geode::Popup<AchievementMenu*, Category*> {
+class AchievementCategoryPopup : public geode::Popup {
    public:
     void createTitle();
     void addProgressText(int percent, int statValue, int goalValue);

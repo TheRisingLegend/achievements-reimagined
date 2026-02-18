@@ -4,7 +4,7 @@ using namespace geode::prelude;
 
 ProgressPopup* ProgressPopup::create(AchievementMenu* achievementMenu, Category* category) {
     auto popup = new ProgressPopup();
-    if (popup && popup->initAnchored(450.f, 280.f, achievementMenu, category)) {
+    if (popup && popup->init(achievementMenu, category)) {
         popup->autorelease();
         return popup;
     }
@@ -12,7 +12,10 @@ ProgressPopup* ProgressPopup::create(AchievementMenu* achievementMenu, Category*
     return nullptr;
 }
 
-bool ProgressPopup::setup(AchievementMenu* achievementMenu, Category* category) {
+bool ProgressPopup::init(AchievementMenu* achievementMenu, Category* category) {
+    if (!Popup::init(450.f, 280.f))
+        return false;
+
     m_achievementMenu = achievementMenu;
     m_category = category;
     m_numAchievements = m_category->achievements.size();
@@ -98,7 +101,7 @@ CCNode* ProgressPopup::createPage(int pageNum) {
 
                 if (gameManager->m_playerGlow) {
                     CCObject* child;
-                    CCARRAY_FOREACH(unlockItem->getChildren(), child) {
+                    for (auto child : CCArrayExt(unlockItem->getChildren())) {
                         if (auto spr = typeinfo_cast<SimplePlayer*>(child)) {
                             spr->setGlowOutline(gameManager->colorForIdx(gameManager->getPlayerGlowColor()));
                         }

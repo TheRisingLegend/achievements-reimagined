@@ -5,9 +5,9 @@
 
 #include "utils.hpp"
 
-class AchievementMenu : public geode::Popup<> {
+class AchievementMenu : public geode::Popup {
    protected:
-    bool setup() override;
+    bool init() override;
 
    public:
     static AchievementMenu* create();
