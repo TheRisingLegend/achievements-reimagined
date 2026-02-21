@@ -74,5 +74,6 @@ int extractValue(const std::string& desc) {
         return 1;
 
     std::string valueStr = match[1].str();
-    return numFromString<int>(valueStr, 10).unwrapOr(1);
+    valueStr.erase(std::remove(valueStr.begin(), valueStr.end(), ','), valueStr.end());
+    return numFromString<int>(valueStr).unwrapOr(1);
 }
