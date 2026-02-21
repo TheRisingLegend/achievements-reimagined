@@ -71,8 +71,7 @@ int extractValue(const std::string& desc) {
     std::smatch match;
     if (std::regex_search(desc, match, numberRegex)) {
         std::string valueStr = match[1].str();
-        valueStr.erase(std::remove(valueStr.begin(), valueStr.end(), ','), valueStr.end());
-        return std::stoi(valueStr);
+        return numFromString<int>(valueStr, 10);
     }
     return 1;
 }
