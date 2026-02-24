@@ -70,6 +70,12 @@
 			"description": "Hide the checkmarks that show if you have completed a category.",
 			"type": "bool",
 			"default": false
+		},
+		"hide-category-count": {
+			"name": "Hide Category Progress Counts",
+			"description": "Hide the counts on each button of how many achievements you have completed in a category.",
+			"type": "bool",
+			"default": false
 		}
 	}
 }

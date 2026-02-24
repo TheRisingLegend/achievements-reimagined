@@ -53,7 +53,7 @@ bool AchievementMenu::init() {
         {"Misc", "Misc", "Other", "distinct", "misc.png"_spr, {"rate", "moreGames", "facebook", "youtube", "twitter"}},
         {"Steam Exclusive", "Steam\nExclusive", "Other", "distinct", "steam.png"_spr, {"steam##"}}};
 
-    setTitle("Achievements", "goldFont.fnt", 1.0f);
+    setTitle("Achievements", "goldFont.fnt", 1.0f, 15.f);
 
     addCornerSprites();
 
@@ -135,7 +135,7 @@ void AchievementMenu::createCategoryMenu() {
         auto subTitle = CCLabelBMFont::create(pageTitles[i].c_str(), "bigFont.fnt");
         subTitle->setID("page-subtitle");
         subTitle->setScale(0.5f);
-        subTitle->setPosition({menuPage->getContentWidth() / 2, 245});
+        subTitle->setPosition({menuPage->getContentWidth() / 2, 247});
         menuPage->addChild(subTitle);
 
         auto buttonMenu = CCMenu::create();
@@ -164,7 +164,10 @@ void AchievementMenu::addCategoryButtons(CCMenu* menuPage, std::string pageTitle
     for (int i = 0; i < m_achievementCategories.size(); i++) {
         if (m_achievementCategories[i].page != pageTitle) continue;
 
-        totalAchievementsInPage += m_achievementCategories[i].achievements.size();
+        int totalAchievementsInCategory = m_achievementCategories[i].achievements.size();
+        totalAchievementsInPage += totalAchievementsInCategory;
+
+        int completedAchievementsInCategory = 0;
 
         ButtonSprite* buttonSprite = ButtonSprite::create(m_achievementCategories[i].formattedName.c_str(), 90.f, true, "bigFont.fnt", "GJ_button_01.png", 40.f, 0.35f);
 
@@ -211,6 +214,16 @@ void AchievementMenu::addCategoryButtons(CCMenu* menuPage, std::string pageTitle
             }
         }
 
+        // Calculate some values for the checkmark and progress fraction
+        bool isCategoryCompleted = true;
+        for (const Achievement* ach : m_achievementCategories[i].achievements) {
+            if (!achievementManager->isAchievementEarned(ach->id.c_str())) {
+                isCategoryCompleted = false;
+            } else {
+                completedAchievementsInCategory++;
+                completedAchievementsInPage++;
+            }
+        }
         // Checkmark for completed categories, if enabled
         if (!Mod::get()->getSettingValue<bool>("hide-category-checkmarks")) {
             CCSprite* checkmark = CCSprite::createWithSpriteFrameName("GJ_completesIcon_001.png");
@@ -219,15 +232,14 @@ void AchievementMenu::addCategoryButtons(CCMenu* menuPage, std::string pageTitle
             checkmark->setZOrder(1);
             buttonSprite->addChild(checkmark);
 
-            bool isCategoryCompleted = true;
-            for (const Achievement* ach : m_achievementCategories[i].achievements) {
-                if (!achievementManager->isAchievementEarned(ach->id.c_str())) {
-                    isCategoryCompleted = false;
-                } else {
-                    completedAchievementsInPage++;
-                }
-            }
             checkmark->setVisible(isCategoryCompleted);
+        }
+        // Progress fraction for progress categories, if enabled
+        if (!Mod::get()->getSettingValue<bool>("hide-category-count") && totalAchievementsInCategory > 0) {
+            CCNode* completedFraction = getProgressText(totalAchievementsInCategory, completedAchievementsInCategory);
+            completedFraction->setPosition({5.f, buttonSprite->getContentHeight() - 5.f});
+            completedFraction->setScale(0.75f);
+            buttonSprite->addChild(completedFraction);
         }
 
         CCMenuItemSpriteExtra* button = CCMenuItemSpriteExtra::create(
