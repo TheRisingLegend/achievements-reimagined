@@ -62,7 +62,10 @@ bool AchievementMenu::init() {
         auto item = array->objectAtIndex(i);
 
         auto dict = typeinfo_cast<CCDictionary*>(item);
-        if (!dict) continue;
+        if (!dict) {
+            log::debug("Unexpected achievement item type at index {}: {}", i, typeid(*item).name());
+            continue;
+        }
 
         Achievement* ach = new Achievement();
 
