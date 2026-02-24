@@ -135,7 +135,7 @@ void AchievementMenu::createCategoryMenu() {
         auto subTitle = CCLabelBMFont::create(pageTitles[i].c_str(), "bigFont.fnt");
         subTitle->setID("page-subtitle");
         subTitle->setScale(0.5f);
-        subTitle->setPosition({menuPage->getContentWidth() / 2, 240});
+        subTitle->setPosition({menuPage->getContentWidth() / 2, 245});
         menuPage->addChild(subTitle);
 
         auto buttonMenu = CCMenu::create();
@@ -149,16 +149,22 @@ void AchievementMenu::createCategoryMenu() {
                                   ->setGrowCrossAxis(true));
         menuPage->addChild(buttonMenu);
 
-        addCategoryButtons(buttonMenu, pageTitles[i]);
+        int totalAchievementsInPage = 0;
+        int completedAchievementsInPage = 0;
+        addCategoryButtons(buttonMenu, pageTitles[i], totalAchievementsInPage, completedAchievementsInPage);
         buttonMenu->updateLayout();
+
+        menuPage->addChild(getProgressText(totalAchievementsInPage, completedAchievementsInPage));
 
         m_categoriesMenu.push_back(menuPage);
     }
 }
 
-void AchievementMenu::addCategoryButtons(CCMenu* menuPage, std::string pageTitle) {
+void AchievementMenu::addCategoryButtons(CCMenu* menuPage, std::string pageTitle, int& totalAchievementsInPage, int& completedAchievementsInPage) {
     for (int i = 0; i < m_achievementCategories.size(); i++) {
         if (m_achievementCategories[i].page != pageTitle) continue;
+
+        totalAchievementsInPage += m_achievementCategories[i].achievements.size();
 
         ButtonSprite* buttonSprite = ButtonSprite::create(m_achievementCategories[i].formattedName.c_str(), 90.f, true, "bigFont.fnt", "GJ_button_01.png", 40.f, 0.35f);
 
@@ -217,7 +223,8 @@ void AchievementMenu::addCategoryButtons(CCMenu* menuPage, std::string pageTitle
             for (const Achievement* ach : m_achievementCategories[i].achievements) {
                 if (!achievementManager->isAchievementEarned(ach->id.c_str())) {
                     isCategoryCompleted = false;
-                    break;
+                } else {
+                    completedAchievementsInPage++;
                 }
             }
             checkmark->setVisible(isCategoryCompleted);
@@ -256,6 +263,35 @@ void AchievementMenu::onCategoryButton(CCObject* sender) {
     popup->show();
 
     hideArrows();
+}
+
+CCNode* AchievementMenu::getProgressText(int total, int completed) {
+    CCLabelBMFont* numCompleteLabel = nullptr;
+
+    if (completed < total) {
+        numCompleteLabel = CCLabelBMFont::create(formatWithCommas(completed).c_str(), "bigFont.fnt");
+        numCompleteLabel->setScale(0.2925f);
+        numCompleteLabel->setPosition({-2, -0.25f});
+    } else {
+        numCompleteLabel = CCLabelBMFont::create(formatWithCommas(completed).c_str(), "goldFont.fnt");
+        numCompleteLabel->setScale(0.375f);
+        numCompleteLabel->setPosition({-2, 0});
+    }
+
+    std::string goalText = formatWithCommas(total);
+    auto goalLabel = CCLabelBMFont::create(("/" + goalText).c_str(), "goldFont.fnt");
+    goalLabel->setScale(0.375f);
+    goalLabel->setAnchorPoint({0, 0.5f});
+    goalLabel->setPosition({-3, 0});
+    numCompleteLabel->setAnchorPoint({1, 0.5f});
+
+    auto container = CCNode::create();
+    container->setID("fraction-complete");
+    container->addChild(numCompleteLabel);
+    container->addChild(goalLabel);
+    container->setPosition({225, 235});
+
+    return container;
 }
 
 void AchievementMenu::addNavigation() {

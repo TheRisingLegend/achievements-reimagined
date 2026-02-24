@@ -21,8 +21,9 @@ class AchievementMenu : public geode::Popup {
     int m_maxCategoriesPerPage = 12;
 
     void createCategoryMenu();
-    void addCategoryButtons(cocos2d::CCMenu* menuPage, std::string pageTitle);
+    void addCategoryButtons(cocos2d::CCMenu* menuPage, std::string pageTitle, int& totalAchievementsInPage, int& completedAchievementsInPage);
     void onCategoryButton(CCObject* sender);
+    cocos2d::CCNode* getProgressText(int total, int completed);
 
     void addNavigation();
     void onCategoryArrow(CCObject* sender);
