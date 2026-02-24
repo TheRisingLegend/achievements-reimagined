@@ -237,6 +237,7 @@ void AchievementMenu::addCategoryButtons(CCMenu* menuPage, std::string pageTitle
         // Progress fraction for progress categories, if enabled
         if (!Mod::get()->getSettingValue<bool>("hide-category-count") && totalAchievementsInCategory > 0) {
             CCNode* completedFraction = getProgressText(totalAchievementsInCategory, completedAchievementsInCategory);
+            completedFraction->setAnchorPoint({0, 0.5f});
             completedFraction->setPosition({5.f, buttonSprite->getContentHeight() - 5.f});
             completedFraction->setScale(0.75f);
             buttonSprite->addChild(completedFraction);
