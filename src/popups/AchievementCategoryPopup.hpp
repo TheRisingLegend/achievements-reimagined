@@ -9,7 +9,8 @@ class AchievementMenu;
 class AchievementCategoryPopup : public geode::Popup {
    public:
     void createTitle();
-    void addProgressText(int percent, int statValue, int goalValue);
+    void addProgressText(int statValue, int goalValue);
+    void addLogo();
     void addCornerSprites();
     void addNavigation();
 

@@ -54,9 +54,10 @@ bool DistinctPopup::init(AchievementMenu* achievementMenu, Category* category) {
             numAchievementsComplete++;
         }
     }
-    int percentComplete = 100 * float(numAchievementsComplete) / m_numAchievements;
 
-    addProgressText(percentComplete, numAchievementsComplete, m_numAchievements);
+    addProgressText(numAchievementsComplete, m_numAchievements);
+
+    addLogo();
 
     addCornerSprites();
 

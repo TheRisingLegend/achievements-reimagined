@@ -12,29 +12,17 @@ void AchievementCategoryPopup::createTitle() {
     m_mainLayer->addChild(unlockTitle);
 }
 
-void AchievementCategoryPopup::addProgressText(int percent, int statValue, int goalValue) {
-    CCLabelBMFont* percentLabel = nullptr;
+void AchievementCategoryPopup::addProgressText(int statValue, int goalValue) {
     CCLabelBMFont* numCompleteLabel = nullptr;
 
-    if (percent < 100) {
-        percentLabel = CCLabelBMFont::create(("(" + std::to_string(percent) + "%)").c_str(), "bigFont.fnt");
-        percentLabel->setScale(0.232f);
-
+    if (statValue < goalValue) {
         numCompleteLabel = CCLabelBMFont::create(formatWithCommas(statValue).c_str(), "bigFont.fnt");
         numCompleteLabel->setScale(0.78f);
         numCompleteLabel->setPosition({-2, -0.25f});
     } else {
-        percentLabel = CCLabelBMFont::create(("(" + std::to_string(percent) + "%)").c_str(), "goldFont.fnt");
-        percentLabel->setScale(0.3f);
-
         numCompleteLabel = CCLabelBMFont::create(formatWithCommas(statValue).c_str(), "goldFont.fnt");
         numCompleteLabel->setPosition({-2, 0});
     }
-
-    percentLabel->setID("percent-complete");
-    percentLabel->setPosition({m_mainLayer->getContentWidth() / 2, 220});
-    percentLabel->setAnchorPoint({0.5f, 0.5f});
-    m_mainLayer->addChild(percentLabel);
 
     std::string goalText = formatWithCommas(goalValue);
     auto goalLabel = CCLabelBMFont::create(("/" + goalText).c_str(), "goldFont.fnt");
@@ -50,6 +38,46 @@ void AchievementCategoryPopup::addProgressText(int percent, int statValue, int g
     container->setPosition({225, 237});
     container->setScale(0.5f);
     m_mainLayer->addChild(container);
+}
+
+void AchievementCategoryPopup::addLogo() {
+    const std::vector<std::string> fromSpritesheet = {"Stars", "Moons", "Diamonds", "Secret Coins", "User Coins", "Creator"};
+
+    CCSprite* logo;
+    if (std::find(fromSpritesheet.begin(), fromSpritesheet.end(), m_category->name) != fromSpritesheet.end())
+        logo = CCSprite::createWithSpriteFrameName(m_category->logo.c_str());  // try from spritesheet
+    else
+        logo = CCSprite::create(m_category->logo.c_str());  // otherwise try mod resources from logos/
+
+    if (!logo) {
+        log::error("Failed to load logo for category: {}", m_category->name);
+    } else {
+        logo->setID("logo");
+        logo->setAnchorPoint({0.5f, 0.5f});
+        logo->setScale(std::min(20.f / logo->getContentWidth(), 20.f / logo->getContentHeight()));
+        logo->setPosition({225.f, 215.f});
+        logo->setZOrder(1);
+        m_mainLayer->addChild(logo);
+
+        if (m_category->name == "Jumps") {
+            GJItemIcon* jumpingIcon = GJItemIcon::create(UnlockType::Cube, gameManager->getPlayerFrame(), gameManager->colorForIdx(gameManager->getPlayerColor()), gameManager->colorForIdx(gameManager->getPlayerColor2()), true, false, false, gameManager->colorForIdx(gameManager->getPlayerGlowColor()));
+
+            // Jank way to set glow cause not sure how to do that in the above create
+            CCObject* child;
+            if (gameManager->m_playerGlow) {
+                CCObject* child;
+                for (auto child : CCArrayExt(jumpingIcon->getChildren())) {
+                    if (auto spr = typeinfo_cast<SimplePlayer*>(child)) {
+                        spr->setGlowOutline(gameManager->colorForIdx(gameManager->getPlayerGlowColor()));
+                    }
+                }
+            }
+
+            jumpingIcon->setRotation(50.f);
+            jumpingIcon->setPosition({40, 60});
+            logo->addChild(jumpingIcon);
+        }
+    }
 }
 
 void AchievementCategoryPopup::addCornerSprites() {

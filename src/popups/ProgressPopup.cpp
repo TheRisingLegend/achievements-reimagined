@@ -27,15 +27,14 @@ bool ProgressPopup::init(AchievementMenu* achievementMenu, Category* category) {
 
     createTitle();
 
-    // Progress percent and fraction
-    int percentComplete = std::min(100, achievementManager->percentForAchievement(m_category->achievements.back()->id.c_str()));
-
     if (m_category->name == "Followed Creators")
         m_statValue = gameLevelManager->m_followedCreators->count();
     else
         m_statValue = m_category->statKey.empty() ? 0 : gameStatsManager->getStat(m_category->statKey.c_str());
 
-    addProgressText(percentComplete, m_statValue, m_category->achievements.back()->unlockValue);
+    addProgressText(m_statValue, m_category->achievements.back()->unlockValue);
+
+    addLogo();
 
     addCornerSprites();
 
