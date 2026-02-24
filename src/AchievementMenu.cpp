@@ -291,7 +291,7 @@ CCNode* AchievementMenu::getProgressText(int total, int completed) {
     if (completed < total) {
         numCompleteLabel = CCLabelBMFont::create(formatWithCommas(completed).c_str(), "bigFont.fnt");
         numCompleteLabel->setScale(0.2925f);
-        numCompleteLabel->setPosition({-2, -0.25f});
+
     } else {
         numCompleteLabel = CCLabelBMFont::create(formatWithCommas(completed).c_str(), "goldFont.fnt");
         numCompleteLabel->setScale(0.375f);
@@ -302,12 +302,21 @@ CCNode* AchievementMenu::getProgressText(int total, int completed) {
     auto goalLabel = CCLabelBMFont::create(("/" + goalText).c_str(), "goldFont.fnt");
     goalLabel->setScale(0.375f);
     goalLabel->setAnchorPoint({0, 0.5f});
-    goalLabel->setPosition({-3, 0});
     numCompleteLabel->setAnchorPoint({1, 0.5f});
 
     auto container = CCNode::create();
+    container->setContentSize({numCompleteLabel->getContentWidth() * numCompleteLabel->getScaleX() + goalLabel->getContentWidth() * goalLabel->getScaleX(), numCompleteLabel->getContentHeight() * numCompleteLabel->getScaleY()});
+    container->setAnchorPoint({0.5f, 0.5f});
     container->addChild(numCompleteLabel);
     container->addChild(goalLabel);
+
+    // Adjust position of labels based on the newly set container size
+    if (completed < total) {
+        numCompleteLabel->setPosition({container->getContentWidth() / 2 - 2, container->getContentHeight() / 2 - 0.25f});
+    } else {
+        numCompleteLabel->setPosition({container->getContentWidth() / 2, container->getContentHeight() / 2});
+    }
+    goalLabel->setPosition({container->getContentWidth() / 2 - 3, container->getContentHeight() / 2});
 
     return container;
 }
