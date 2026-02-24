@@ -272,7 +272,7 @@ cocos2d::CCNode* PathPopup::createPage(int pageNum) {
     /* Progress Bar */
     CCNode* progressBar = CCNode::create();
     progressBar->setID("progress-bar-container");
-    progressBar->setPosition({m_mainLayer->getContentWidth() / 2, 120.f});
+    progressBar->setPosition({m_mainLayer->getContentWidth() / 2, 130.f});
     page->addChild(progressBar);
 
     // Background (dark)

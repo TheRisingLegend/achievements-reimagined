@@ -18,28 +18,26 @@ void AchievementCategoryPopup::addProgressText(int percent, int statValue, int g
 
     if (percent < 100) {
         percentLabel = CCLabelBMFont::create(("(" + std::to_string(percent) + "%)").c_str(), "bigFont.fnt");
-        percentLabel->setScale(0.58f);
+        percentLabel->setScale(0.232f);
 
         numCompleteLabel = CCLabelBMFont::create(formatWithCommas(statValue).c_str(), "bigFont.fnt");
-        numCompleteLabel->setScale(0.39f);
+        numCompleteLabel->setScale(0.78f);
         numCompleteLabel->setPosition({-2, -0.25f});
     } else {
         percentLabel = CCLabelBMFont::create(("(" + std::to_string(percent) + "%)").c_str(), "goldFont.fnt");
-        percentLabel->setScale(0.75f);
+        percentLabel->setScale(0.3f);
 
         numCompleteLabel = CCLabelBMFont::create(formatWithCommas(statValue).c_str(), "goldFont.fnt");
-        numCompleteLabel->setScale(0.5f);
         numCompleteLabel->setPosition({-2, 0});
     }
 
     percentLabel->setID("percent-complete");
-    percentLabel->setPosition({m_mainLayer->getContentWidth() / 2, 230});
+    percentLabel->setPosition({m_mainLayer->getContentWidth() / 2, 220});
     percentLabel->setAnchorPoint({0.5f, 0.5f});
     m_mainLayer->addChild(percentLabel);
 
     std::string goalText = formatWithCommas(goalValue);
     auto goalLabel = CCLabelBMFont::create(("/" + goalText).c_str(), "goldFont.fnt");
-    goalLabel->setScale(0.5f);
     goalLabel->setAnchorPoint({0, 0.5f});
     goalLabel->setPosition({-3, 0});
     numCompleteLabel->setAnchorPoint({1, 0.5f});
@@ -49,7 +47,8 @@ void AchievementCategoryPopup::addProgressText(int percent, int statValue, int g
     container->addChild(numCompleteLabel);
     container->addChild(goalLabel);
 
-    container->setPosition({225, 210});
+    container->setPosition({225, 237});
+    container->setScale(0.5f);
     m_mainLayer->addChild(container);
 }
 
