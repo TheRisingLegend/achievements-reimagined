@@ -157,7 +157,10 @@ void AchievementMenu::createCategoryMenu() {
         addCategoryButtons(buttonMenu, pageTitles[i], totalAchievementsInPage, completedAchievementsInPage);
         buttonMenu->updateLayout();
 
-        menuPage->addChild(getProgressText(totalAchievementsInPage, completedAchievementsInPage));
+        CCNode* progressText = getProgressText(totalAchievementsInPage, completedAchievementsInPage);
+        progressText->setID("page-progress-fraction");
+        progressText->setPosition({menuPage->getContentWidth() / 2, 235});
+        menuPage->addChild(progressText);
 
         m_categoriesMenu.push_back(menuPage);
     }
@@ -240,6 +243,7 @@ void AchievementMenu::addCategoryButtons(CCMenu* menuPage, std::string pageTitle
         // Progress fraction for progress categories, if enabled
         if (!Mod::get()->getSettingValue<bool>("hide-category-count") && totalAchievementsInCategory > 0) {
             CCNode* completedFraction = getProgressText(totalAchievementsInCategory, completedAchievementsInCategory);
+            completedFraction->setID("category-progress-fraction");
             completedFraction->setAnchorPoint({0, 0.5f});
             completedFraction->setPosition({5.f, buttonSprite->getContentHeight() - 5.f});
             completedFraction->setScale(0.75f);
@@ -302,10 +306,8 @@ CCNode* AchievementMenu::getProgressText(int total, int completed) {
     numCompleteLabel->setAnchorPoint({1, 0.5f});
 
     auto container = CCNode::create();
-    container->setID("fraction-complete");
     container->addChild(numCompleteLabel);
     container->addChild(goalLabel);
-    container->setPosition({225, 235});
 
     return container;
 }
