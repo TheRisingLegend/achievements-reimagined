@@ -87,7 +87,7 @@ CCNode* DistinctPopup::createPage(int pageNum) {
     bool usePlayerColors = Mod::get()->getSettingValue<bool>("use-player-colors");
 
     CCMenu* tiles = CCMenu::create();
-    tiles->setPosition({m_mainLayer->getContentWidth() / 2, m_mainLayer->getContentHeight() / 2 - 10});
+    tiles->setPosition({m_mainLayer->getContentWidth() / 2, m_mainLayer->getContentHeight() / 2 - 22});
     tiles->setContentSize({80 * float(m_maxIconsPerPage) / 2 + 50, m_mainLayer->getContentHeight() - 100});
     tiles->setID("tiles");
     tiles->setLayout(RowLayout::create()
