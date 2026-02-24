@@ -64,7 +64,7 @@ CCNode* ProgressPopup::createPage(int pageNum) {
 
     CCNode* progressBar = createProgressBar(pageNum, numIconsOnPage);
     progressBar->setID("progress-bar-container");
-    progressBar->setPosition({m_mainLayer->getContentWidth() / 2, 130.f});
+    progressBar->setPosition({m_mainLayer->getContentWidth() / 2, 120.f});
     page->addChild(progressBar);
 
     /* Player Sprites */

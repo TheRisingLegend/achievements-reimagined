@@ -217,7 +217,6 @@ cocos2d::CCNode* ShardPopup::createPage(int pageNum) {
     container->setContentSize({100, 20});
 
     int gameStatID = gameStatIDs[pageNum];
-    log::debug("stat ID: {}", gameStatID);
     int progress = 100;
     if (pageNum == 5 || pageNum == 11) {  // bonus pages, these values aren't stored so need to calculate them
         for (int i = pageNum - 5; i < pageNum; ++i) {
@@ -257,7 +256,7 @@ cocos2d::CCNode* ShardPopup::createPage(int pageNum) {
     /* Progress Bar */
     CCNode* progressBar = CCNode::create();
     progressBar->setID("progress-bar-container");
-    progressBar->setPosition({m_mainLayer->getContentWidth() / 2, 130.f});
+    progressBar->setPosition({m_mainLayer->getContentWidth() / 2, 120.f});
     page->addChild(progressBar);
 
     // Background (dark)
