@@ -8,7 +8,7 @@
 	},
 	"id": "therisinglegend.achievements_reimagined",
 	"name": "Achievements Reimagined",
-	"version": "v1.3.2",
+	"version": "v1.4.0",
 	"developer": "TheRisingLegend",
 	"description": "Completely remakes the achievements menu!",
 	"links": {
@@ -34,30 +34,18 @@
 		}
 	},
 	"settings": {
+		"use-player-colors": {
+			"name": "Use Player Colors",
+			"description": "Use your player colors for progress bars and icons.",
+			"type": "bool",
+			"default": true
+		},
 		"show-secrets": {
 			"name": "Show Secrets",
 			"description": "Use descriptions that reveal how to complete secret achievements, such as vault codes.",
 			"type": "bool",
 			"default": false,
 			"requires-restart": true
-		},
-		"show_uncompleted_first":{
-			"name": "Show Uncompleted Achievements First",
-			"description": "Show uncompleted achievements first in the list, then completed ones. (Does not apply to categories that use a progress bar)",
-			"type": "bool",
-			"default": false
-		},
-        "use-player-colors": {
-            "name": "Use Player Colors",
-            "description": "Use your player colors for progress bars and icons.",
-            "type": "bool",
-            "default": true
-        },
-		"all-discrete": {
-			"name": "No Progress Bars",
-			"description": "Show all achievements with their own boxes instead of combining into a progress bar when possible. (Not recommended but you have free will so...)",
-			"type": "bool",
-			"default": false
 		},
 		"hide-achievement-checkmarks": {
 			"name": "Hide Achievement Completion Checkmarks",
@@ -74,6 +62,18 @@
 		"hide-category-count": {
 			"name": "Hide Category Progress Counts",
 			"description": "Hide the counts on each button of how many achievements you have completed in a category.",
+			"type": "bool",
+			"default": false
+		},
+		"show_uncompleted_first":{
+			"name": "Show Uncompleted Achievements First",
+			"description": "Show uncompleted achievements first in the list, then completed ones. (Does not apply to categories that use a progress bar)",
+			"type": "bool",
+			"default": false
+		},
+		"all-discrete": {
+			"name": "No Progress Bars",
+			"description": "Show all achievements with their own boxes instead of combining into a progress bar when possible. (Not recommended but you have free will so...)",
 			"type": "bool",
 			"default": false
 		}

@@ -1,3 +1,8 @@
+# 1.4.0
+
+- Add counts of completed achievements in places
+- Some minor visual tweaks
+
 # 1.3.2
 
 - Port to 2.2081 / Geode 5
