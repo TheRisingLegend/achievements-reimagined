@@ -245,7 +245,7 @@ void AchievementMenu::addCategoryButtons(CCMenu* menuPage, std::string pageTitle
             CCNode* completedFraction = getProgressText(totalAchievementsInCategory, completedAchievementsInCategory);
             completedFraction->setID("category-progress-fraction");
             completedFraction->setAnchorPoint({0, 0.5f});
-            completedFraction->setPosition({5.f, buttonSprite->getContentHeight() - 5.f});
+            completedFraction->setPosition({4.f, buttonSprite->getContentHeight() - 6.f});
             completedFraction->setScale(0.75f);
             buttonSprite->addChild(completedFraction);
         }
@@ -295,7 +295,6 @@ CCNode* AchievementMenu::getProgressText(int total, int completed) {
     } else {
         numCompleteLabel = CCLabelBMFont::create(formatWithCommas(completed).c_str(), "goldFont.fnt");
         numCompleteLabel->setScale(0.375f);
-        numCompleteLabel->setPosition({-2, 0});
     }
 
     std::string goalText = formatWithCommas(total);
@@ -314,7 +313,7 @@ CCNode* AchievementMenu::getProgressText(int total, int completed) {
     if (completed < total) {
         numCompleteLabel->setPosition({container->getContentWidth() / 2 - 2, container->getContentHeight() / 2 - 0.25f});
     } else {
-        numCompleteLabel->setPosition({container->getContentWidth() / 2, container->getContentHeight() / 2});
+        numCompleteLabel->setPosition({container->getContentWidth() / 2 - 2, container->getContentHeight() / 2});
     }
     goalLabel->setPosition({container->getContentWidth() / 2 - 3, container->getContentHeight() / 2});
 
