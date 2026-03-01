@@ -333,16 +333,15 @@ void AchievementMenu::addCategoryButtons(CCMenu* menuPage, std::string pageTitle
                 completedAchievementsInPage++;
             }
         }
-        // Checkmark for completed categories, if enabled
-        if (!Mod::get()->getSettingValue<bool>("hide-category-checkmarks")) {
-            CCSprite* checkmark = CCSprite::createWithSpriteFrameName("GJ_completesIcon_001.png");
-            checkmark->setID("checkmark");
-            checkmark->setPosition({buttonSprite->getContentWidth() - 5.f, buttonSprite->getContentHeight() - 5.f});
-            checkmark->setZOrder(1);
-            buttonSprite->addChild(checkmark);
+        // Checkmark for completed categories
+        CCSprite* checkmark = CCSprite::createWithSpriteFrameName("GJ_completesIcon_001.png");
+        checkmark->setID("checkmark");
+        checkmark->setPosition({buttonSprite->getContentWidth() - 5.f, buttonSprite->getContentHeight() - 5.f});
+        checkmark->setZOrder(1);
+        buttonSprite->addChild(checkmark);
 
-            checkmark->setVisible(isCategoryCompleted);
-        }
+        checkmark->setVisible(isCategoryCompleted);
+
         // Progress fraction for progress categories, if enabled
         if (!Mod::get()->getSettingValue<bool>("hide-category-count") && totalAchievementsInCategory > 0) {
             CCNode* completedFraction = createFractionLabel(completedAchievementsInCategory, totalAchievementsInCategory);

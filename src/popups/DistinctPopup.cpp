@@ -129,14 +129,12 @@ CCNode* DistinctPopup::createPage(int pageNum) {
         tile->addChild(desc);
 
         /* Completion checkmark */
-        if (!Mod::get()->getSettingValue<bool>("hide-achievement-checkmarks")) {
-            CCSprite* checkmark = CCSprite::createWithSpriteFrameName("GJ_completesIcon_001.png");
-            checkmark->setID("checkmark");
-            checkmark->setPosition({bg->getContentWidth() - 10.f, bg->getContentHeight() - 10.f});
-            checkmark->setZOrder(1);
-            checkmark->setVisible(achievementManager->isAchievementEarned(currAchievement->id.c_str()));
-            bg->addChild(checkmark);
-        }
+        CCSprite* checkmark = CCSprite::createWithSpriteFrameName("GJ_completesIcon_001.png");
+        checkmark->setID("checkmark");
+        checkmark->setPosition({bg->getContentWidth() - 10.f, bg->getContentHeight() - 10.f});
+        checkmark->setZOrder(1);
+        checkmark->setVisible(achievementManager->isAchievementEarned(currAchievement->id.c_str()));
+        bg->addChild(checkmark);
 
         /* Player sprite */
         GJItemIcon* unlockItem;

@@ -34,11 +34,32 @@
 		}
 	},
 	"settings": {
+		"visual-title": {
+			"name": "Visual Settings",
+			"type": "title",
+			"description": "These settings change the visual appearance of the achievements menu."
+		},
 		"use-player-colors": {
 			"name": "Use Player Colors",
 			"description": "Use your player colors for progress bars and icons.",
 			"type": "bool",
 			"default": true
+		},
+		"hide-category-count": {
+			"name": "Hide Category Progress Counts",
+			"description": "Hide the counts on each button of how many achievements you have completed in a category.",
+			"type": "bool",
+			"default": false
+		},
+		"all-discrete": {
+			"name": "No Progress Bars",
+			"description": "Show all achievements with their own boxes instead of combining into a progress bar when possible. (Not recommended but you have free will so...)",
+			"type": "bool",
+			"default": false
+		},
+		"other-title": {
+			"name": "Other Settings",
+			"type": "title"
 		},
 		"show-secrets": {
 			"name": "Show Secrets",
@@ -47,33 +68,9 @@
 			"default": false,
 			"requires-restart": true
 		},
-		"hide-achievement-checkmarks": {
-			"name": "Hide Achievement Completion Checkmarks",
-			"description": "Hide the checkmarks that show if you have completed an achievement.",
-			"type": "bool",
-			"default": false
-		},
-		"hide-category-checkmarks": {
-			"name": "Hide Category Completion Checkmarks",
-			"description": "Hide the checkmarks that show if you have completed a category.",
-			"type": "bool",
-			"default": false
-		},
-		"hide-category-count": {
-			"name": "Hide Category Progress Counts",
-			"description": "Hide the counts on each button of how many achievements you have completed in a category.",
-			"type": "bool",
-			"default": false
-		},
 		"show_uncompleted_first":{
 			"name": "Show Uncompleted Achievements First",
 			"description": "Show uncompleted achievements first in the list, then completed ones. (Does not apply to categories that use a progress bar)",
-			"type": "bool",
-			"default": false
-		},
-		"all-discrete": {
-			"name": "No Progress Bars",
-			"description": "Show all achievements with their own boxes instead of combining into a progress bar when possible. (Not recommended but you have free will so...)",
 			"type": "bool",
 			"default": false
 		}

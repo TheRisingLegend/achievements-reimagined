@@ -82,8 +82,7 @@ void ShardPopup::addNavigation(int activePage) {
         } else
             progress = gameStatsManager->getStat(std::to_string(gameStatID).c_str());
 
-        bool showCheckmark = !Mod::get()->getSettingValue<bool>("hide-achievement-checkmarks") && progress >= 100;
-        if (showCheckmark) {
+        if (progress >= 100) {
             CCSprite* checkmark = CCSprite::createWithSpriteFrameName("GJ_completesIcon_001.png");
             checkmark->setID("checkmark");
             checkmark->setZOrder(1);

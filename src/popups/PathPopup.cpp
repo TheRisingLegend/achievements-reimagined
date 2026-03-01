@@ -76,7 +76,7 @@ void PathPopup::addNavigation(int activePage) {
         CCSprite* offSprite = CCSprite::createWithSpriteFrameName(fmt::format("pathIcon_{:02}_001.png", i + 1).c_str());
         offSprite->setScale(0.5f);
 
-        bool showCheckmark = !Mod::get()->getSettingValue<bool>("hide-achievement-checkmarks") && gameStatsManager->getStat(std::to_string(i + 30).c_str()) >= 1000;
+        bool showCheckmark = gameStatsManager->getStat(std::to_string(i + 30).c_str()) >= 1000;
         if (showCheckmark) {
             CCSprite* checkmark = CCSprite::createWithSpriteFrameName("GJ_completesIcon_001.png");
             checkmark->setID("checkmark");
