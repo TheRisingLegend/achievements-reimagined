@@ -1,3 +1,9 @@
+# 1.5.0
+
+- Reorganized category pages
+- Added summary page to give achievement counts across GD games
+- Removed some settings
+
 # 1.4.0
 
 - Add counts of completed achievements in places

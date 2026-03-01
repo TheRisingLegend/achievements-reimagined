@@ -106,9 +106,13 @@ bool AchievementMenu::init() {
     auto SFC = CCSpriteFrameCache::get();
     SFC->addSpriteFramesWithFile("TowerSheet.plist");
 
-    createCategoryMenu();
-
-    createSummaryPage();
+    if (Mod::get()->getSettingValue<bool>("summary-page-first")) {
+        createSummaryPage();
+        createCategoryMenu();
+    } else {
+        createCategoryMenu();
+        createSummaryPage();
+    }
 
     addNavigation();
 
@@ -129,11 +133,11 @@ void AchievementMenu::createCategoryMenu() {
     std::vector<std::string> pageTitles = {"Levels", "Stats", "Other"};
     for (int i = 0; i < pageTitles.size(); i++) {
         auto menuPage = CCNode::create();
-        menuPage->setID("page-" + std::to_string(i));
-        menuPage->setTag(i);
+        menuPage->setID("page-" + std::to_string(m_categoriesMenu.size()));
+        menuPage->setTag(m_categoriesMenu.size());
         menuPage->setContentSize({m_mainLayer->getContentWidth(), m_mainLayer->getContentHeight() - 70.f});
         menuPage->setPosition({0, 0});
-        menuPage->setVisible(i == m_categoryPage);
+        menuPage->setVisible(m_categoriesMenu.size() == m_categoryPage);
         m_mainLayer->addChild(menuPage);
 
         auto subTitle = CCLabelBMFont::create(pageTitles[i].c_str(), "bigFont.fnt");
@@ -173,7 +177,7 @@ void AchievementMenu::createSummaryPage() {
     summaryPage->setTag(m_categoriesMenu.size());
     summaryPage->setContentSize({m_mainLayer->getContentWidth(), m_mainLayer->getContentHeight() - 70.f});
     summaryPage->setPosition({0, 0});
-    summaryPage->setVisible(false);
+    summaryPage->setVisible(m_categoriesMenu.size() == m_categoryPage);
     m_mainLayer->addChild(summaryPage);
 
     auto subTitle = CCLabelBMFont::create("Summary", "bigFont.fnt");

@@ -1,5 +1,5 @@
 {
-	"geode": "5.0.1",
+	"geode": "5.2.0",
 	"gd": {
 		"win": "2.2081",
 		"android": "2.2081",
@@ -8,7 +8,7 @@
 	},
 	"id": "therisinglegend.achievements_reimagined",
 	"name": "Achievements Reimagined",
-	"version": "v1.4.0",
+	"version": "v1.5.0",
 	"developer": "TheRisingLegend",
 	"description": "Completely remakes the achievements menu!",
 	"links": {
@@ -44,6 +44,12 @@
 			"description": "Use your player colors for progress bars and icons.",
 			"type": "bool",
 			"default": true
+		},
+		"summary-page-first": {
+			"name": "Summary Page First",
+			"description": "Show the summary page first when opening the achievements menu, instead of the categories.",
+			"type": "bool",
+			"default": false
 		},
 		"hide-category-count": {
 			"name": "Hide Category Progress Counts",
