@@ -16,8 +16,8 @@ struct Achievement {
 struct Category {
     std::string name;
     std::string formattedName;  // with new lines
-    std::string page;           // which page: "Levels", "Stats", "Social", or "Other"
-    std::string displayType;    // "distinct" or "progress"
+    std::string page;           // which page: "Levels", "Stats", or "Other"
+    std::string displayType;    // "distinct" or "progress" or "shard" or "path"
     std::string logo;
     std::vector<std::string> identifiers;
     std::string statKey;

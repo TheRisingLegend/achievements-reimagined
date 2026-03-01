@@ -39,13 +39,11 @@ bool AchievementMenu::init() {
         {"Shards", "Shards", "Stats", "shard", "shards.png"_spr, {}},
         {"Paths", "Paths", "Stats", "path", "paths.png"_spr, {}},
 
-        // Social
-        {"Liked/Disliked Levels", "Liked /\nDisliked\nLevels", "Social", "progress", "like_dislike.png"_spr, {"like", "like##", "like##b"}, "10"},
-        {"Rated Levels", "Rated\nLevels", "Social", "progress", "rate.png"_spr, {"rateDiff", "rateDiff##", "rateDiff##b"}, "11"},
-        {"Followed Creators", "Followed\nCreators", "Social", "progress", "followed_creators.png"_spr, {"followCreator", "followCreator##"}},
-        {"Friends", "Friends", "Social", "distinct", "friends.png"_spr, {"friends##"}},
-
         // Other
+        {"Liked/Disliked Levels", "Liked /\nDisliked\nLevels", "Other", "progress", "like_dislike.png"_spr, {"like", "like##", "like##b"}, "10"},
+        {"Rated Levels", "Rated\nLevels", "Other", "progress", "rate.png"_spr, {"rateDiff", "rateDiff##", "rateDiff##b"}, "11"},
+        {"Followed Creators", "Followed\nCreators", "Other", "progress", "followed_creators.png"_spr, {"followCreator", "followCreator##"}},
+        {"Friends", "Friends", "Other", "distinct", "friends.png"_spr, {"friends##"}},
         {"Creator", "Creator", "Other", "distinct", "GJ_hammerIcon_001.png", {"creator##", "submit"}},
         {"Vaults", "Vaults", "Other", "distinct", "vaults.png"_spr, {"v#"}},
         {"Players Destroyed", "Players\nDestroyed", "Other", "progress", "players_destroyed.png"_spr, {}, "9"},
@@ -125,7 +123,7 @@ AchievementMenu* AchievementMenu::create() {
 }
 
 void AchievementMenu::createCategoryMenu() {
-    std::vector<std::string> pageTitles = {"Levels", "Stats", "Social", "Other"};
+    std::vector<std::string> pageTitles = {"Levels", "Stats", "Other"};
     for (int i = 0; i < pageTitles.size(); i++) {
         auto menuPage = CCNode::create();
         menuPage->setID("page-" + std::to_string(i));
