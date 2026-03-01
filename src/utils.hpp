@@ -39,7 +39,7 @@ extern GameManager* gameManager;
 extern GameStatsManager* gameStatsManager;
 extern GameLevelManager* gameLevelManager;
 
-Category* getCategoryForAchievement(const std::string& id, const std::string& achievedDescription);
+cocos2d::CCNode* createFractionLabel(int num, int denom);
 std::string formatWithCommas(int number);
 int extractValue(const std::string& desc);
 

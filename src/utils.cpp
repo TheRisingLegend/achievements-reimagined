@@ -56,6 +56,38 @@ GameManager* gameManager = GameManager::sharedState();
 GameStatsManager* gameStatsManager = GameStatsManager::sharedState();
 GameLevelManager* gameLevelManager = GameLevelManager::sharedState();
 
+cocos2d::CCNode* createFractionLabel(int num, int denom) {
+    CCLabelBMFont* denominatorLabel = CCLabelBMFont::create(("/" + formatWithCommas(denom)).c_str(), "goldFont.fnt");
+    denominatorLabel->setScale(0.375f);
+    denominatorLabel->setAnchorPoint({0, 0.5f});
+
+    CCLabelBMFont* numeratorLabel = nullptr;
+    if (num < denom) {
+        numeratorLabel = CCLabelBMFont::create(formatWithCommas(num).c_str(), "bigFont.fnt");
+        numeratorLabel->setScale(0.2925f);
+    } else {
+        numeratorLabel = CCLabelBMFont::create(formatWithCommas(num).c_str(), "goldFont.fnt");
+        numeratorLabel->setScale(0.375f);
+    }
+    numeratorLabel->setAnchorPoint({1, 0.5f});
+
+    CCNode* container = CCNode::create();
+    container->setContentSize({numeratorLabel->getContentWidth() * numeratorLabel->getScaleX() + denominatorLabel->getContentWidth() * denominatorLabel->getScaleX(), numeratorLabel->getContentHeight() * numeratorLabel->getScaleY()});
+    container->setAnchorPoint({0.5f, 0.5f});
+    container->addChild(numeratorLabel);
+    container->addChild(denominatorLabel);
+
+    // Adjust position of labels based on the newly set container size
+    if (num < denom) {
+        numeratorLabel->setPosition({container->getContentWidth() / 2 - 2, container->getContentHeight() / 2 - 0.25f});
+    } else {
+        numeratorLabel->setPosition({container->getContentWidth() / 2 - 2, container->getContentHeight() / 2});
+    }
+    denominatorLabel->setPosition({container->getContentWidth() / 2 - 3, container->getContentHeight() / 2});
+
+    return container;
+}
+
 std::string formatWithCommas(int number) {
     std::string s = std::to_string(number);
     int n = s.length();

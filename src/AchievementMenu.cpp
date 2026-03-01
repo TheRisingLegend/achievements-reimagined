@@ -18,9 +18,9 @@ bool AchievementMenu::init() {
         {"Main Levels", "Main\nLevels", "Levels", "distinct", "main_levels.png"_spr, {"level##a", "level##b", "demoncoin##", "special##"}},
         {"Tower Levels", "Tower\nLevels", "Levels", "distinct", "tower_levels.png"_spr, {"tower##", "tower##Coin"}},
         {"User Levels", "User\nLevels", "Levels", "progress", "user_levels.png"_spr, {"custom##"}, "4"},
-        {"Meltdown", "Meltdown", "Levels", "distinct", "meltdown.png"_spr, {"mdlevel##b", "mdcoin##", "mdrate"}},
-        {"World", "World", "Levels", "distinct", "world.png"_spr, {"world"}},
-        {"Subzero", "Subzero", "Levels", "distinct", "subzero.png"_spr, {"subzero"}},
+        {"Geometry Dash Meltdown", "Meltdown", "Levels", "distinct", "meltdown.png"_spr, {"mdlevel##b", "mdcoin##", "mdrate"}},
+        {"Geometry Dash World", "World", "Levels", "distinct", "world.png"_spr, {"world"}},
+        {"Geometry Dash Subzero", "Subzero", "Levels", "distinct", "subzero.png"_spr, {"subzero"}},
         {"Demons", "Demons", "Levels", "progress", "demon.png"_spr, {"demon##"}, "5"},
         {"Insanes", "Insanes", "Levels", "progress", "insane.png"_spr, {"insane##"}, "42"},
         {"Daily Levels", "Daily\nLevels", "Levels", "progress", "daily.png"_spr, {"daily##"}, "15"},
@@ -55,6 +55,7 @@ bool AchievementMenu::init() {
 
     addCornerSprites();
 
+    // Parse through achievements and assign them to a category
     CCArray* array = m_achievementManager->m_allAchievements;
     for (int i = 0; i < array->count(); i++) {
         auto item = array->objectAtIndex(i);
@@ -107,6 +108,8 @@ bool AchievementMenu::init() {
 
     createCategoryMenu();
 
+    createSummaryPage();
+
     addNavigation();
 
     return true;
@@ -155,13 +158,115 @@ void AchievementMenu::createCategoryMenu() {
         addCategoryButtons(buttonMenu, pageTitles[i], totalAchievementsInPage, completedAchievementsInPage);
         buttonMenu->updateLayout();
 
-        CCNode* progressText = getProgressText(totalAchievementsInPage, completedAchievementsInPage);
+        CCNode* progressText = createFractionLabel(completedAchievementsInPage, totalAchievementsInPage);
         progressText->setID("page-progress-fraction");
         progressText->setPosition({menuPage->getContentWidth() / 2, 235});
         menuPage->addChild(progressText);
 
         m_categoriesMenu.push_back(menuPage);
     }
+}
+
+void AchievementMenu::createSummaryPage() {
+    auto summaryPage = CCNode::create();
+    summaryPage->setID("page-summary");
+    summaryPage->setTag(m_categoriesMenu.size());
+    summaryPage->setContentSize({m_mainLayer->getContentWidth(), m_mainLayer->getContentHeight() - 70.f});
+    summaryPage->setPosition({0, 0});
+    summaryPage->setVisible(false);
+    m_mainLayer->addChild(summaryPage);
+
+    auto subTitle = CCLabelBMFont::create("Summary", "bigFont.fnt");
+    subTitle->setID("page-subtitle");
+    subTitle->setScale(0.5f);
+    subTitle->setPosition({summaryPage->getContentWidth() / 2, 247});
+    summaryPage->addChild(subTitle);
+
+    std::vector<std::tuple<std::string, std::string, std::string>> summaryTiles = {
+        {"geometry-dash", "Geometry Dash", "geometry_dash.png"_spr},
+        {"geometry-dash-meltdown", "Geometry Dash Meltdown", "meltdown.png"_spr},
+        {"geometry-dash-world", "Geometry Dash World", "world.png"_spr},
+        {"geometry-dash-subzero", "Geometry Dash Subzero", "subzero.png"_spr}};
+
+    CCMenu* tiles = CCMenu::create();
+    tiles->setPosition({m_mainLayer->getContentWidth() / 2, m_mainLayer->getContentHeight() / 2});
+    tiles->setContentSize({80 * float(summaryTiles.size()) / 2 + 50, m_mainLayer->getContentHeight() - 100});
+    tiles->setID("tiles");
+    tiles->setLayout(RowLayout::create()
+                         ->setAutoScale(false)
+                         ->setGrowCrossAxis(true)
+                         ->setAxisAlignment(AxisAlignment::Center)
+                         ->setCrossAxisAlignment(AxisAlignment::Start)
+                         ->setGap(12.f));
+    summaryPage->addChild(tiles);
+
+    for (int i = 0; i < summaryTiles.size(); i++) {
+        CCMenu* tile = CCMenu::create();
+        tile->setContentSize({80, 80});
+        tile->setID("tile-" + std::get<0>(summaryTiles[i]));
+        tiles->addChild(tile);
+
+        /* Background */
+        CCScale9Sprite* bg = CCScale9Sprite::create("square02b_001.png");
+        bg->setID("bg");
+        bg->setContentSize(tile->getContentSize());
+        bg->setPosition({tile->getContentWidth() / 2, tile->getContentHeight() / 2});
+        bg->setColor({116, 56, 29});
+        tile->addChild(bg);
+
+        /* Description */
+        SimpleTextArea* desc = SimpleTextArea::create(std::get<1>(summaryTiles[i]), "bigFont.fnt", 0.2f, 70);
+        desc->setAlignment(kCCTextAlignmentCenter);
+        desc->setWrappingMode(WrappingMode::SPACE_WRAP);
+        desc->setAnchorPoint({0.5f, 0.5f});
+        desc->setID("desc");
+        desc->setPosition({tile->getContentWidth() / 2, tile->getContentHeight() - 10});
+        tile->addChild(desc);
+
+        /* Logo sprite */
+        CCSprite* logoSprite = CCSprite::create(std::get<2>(summaryTiles[i]).c_str());
+        logoSprite->setID("logo-" + std::get<0>(summaryTiles[i]));
+        logoSprite->setScale(0.5f);
+        logoSprite->setPosition({tile->getContentWidth() / 2, tile->getContentHeight() / 2});
+
+        tile->addChild(logoSprite);
+
+        /* Progress fraction */
+        int total = 0;
+        int completed = 0;
+        if (std::get<1>(summaryTiles[i]) == "Geometry Dash") {
+            for (auto category : m_achievementCategories) {
+                if (category.name == "Geometry Dash Meltdown" || category.name == "Geometry Dash World" || category.name == "Geometry Dash Subzero") {
+                    continue;
+                }
+                for (auto achievement : category.achievements) {
+                    total++;
+                    if (achievementManager->isAchievementEarned(achievement->id.c_str())) {
+                        completed++;
+                    }
+                }
+            }
+        } else {
+            for (auto category : m_achievementCategories) {
+                if (category.name == std::get<1>(summaryTiles[i])) {
+                    for (auto achievement : category.achievements) {
+                        total++;
+                        if (achievementManager->isAchievementEarned(achievement->id.c_str())) {
+                            completed++;
+                        }
+                    }
+                }
+            }
+        }
+        CCNode* progressText = createFractionLabel(completed, total);
+        progressText->setID("progress-" + std::get<0>(summaryTiles[i]));
+        progressText->setPosition({tile->getContentWidth() / 2, 10});
+        tile->addChild(progressText);
+    }
+
+    tiles->updateLayout();
+
+    m_categoriesMenu.push_back(summaryPage);
 }
 
 void AchievementMenu::addCategoryButtons(CCMenu* menuPage, std::string pageTitle, int& totalAchievementsInPage, int& completedAchievementsInPage) {
@@ -240,7 +345,7 @@ void AchievementMenu::addCategoryButtons(CCMenu* menuPage, std::string pageTitle
         }
         // Progress fraction for progress categories, if enabled
         if (!Mod::get()->getSettingValue<bool>("hide-category-count") && totalAchievementsInCategory > 0) {
-            CCNode* completedFraction = getProgressText(totalAchievementsInCategory, completedAchievementsInCategory);
+            CCNode* completedFraction = createFractionLabel(completedAchievementsInCategory, totalAchievementsInCategory);
             completedFraction->setID("category-progress-fraction");
             completedFraction->setAnchorPoint({0, 0.5f});
             completedFraction->setPosition({4.f, buttonSprite->getContentHeight() - 6.f});
@@ -281,41 +386,6 @@ void AchievementMenu::onCategoryButton(CCObject* sender) {
     popup->show();
 
     hideArrows();
-}
-
-CCNode* AchievementMenu::getProgressText(int total, int completed) {
-    CCLabelBMFont* numCompleteLabel = nullptr;
-
-    if (completed < total) {
-        numCompleteLabel = CCLabelBMFont::create(formatWithCommas(completed).c_str(), "bigFont.fnt");
-        numCompleteLabel->setScale(0.2925f);
-
-    } else {
-        numCompleteLabel = CCLabelBMFont::create(formatWithCommas(completed).c_str(), "goldFont.fnt");
-        numCompleteLabel->setScale(0.375f);
-    }
-
-    std::string goalText = formatWithCommas(total);
-    auto goalLabel = CCLabelBMFont::create(("/" + goalText).c_str(), "goldFont.fnt");
-    goalLabel->setScale(0.375f);
-    goalLabel->setAnchorPoint({0, 0.5f});
-    numCompleteLabel->setAnchorPoint({1, 0.5f});
-
-    auto container = CCNode::create();
-    container->setContentSize({numCompleteLabel->getContentWidth() * numCompleteLabel->getScaleX() + goalLabel->getContentWidth() * goalLabel->getScaleX(), numCompleteLabel->getContentHeight() * numCompleteLabel->getScaleY()});
-    container->setAnchorPoint({0.5f, 0.5f});
-    container->addChild(numCompleteLabel);
-    container->addChild(goalLabel);
-
-    // Adjust position of labels based on the newly set container size
-    if (completed < total) {
-        numCompleteLabel->setPosition({container->getContentWidth() / 2 - 2, container->getContentHeight() / 2 - 0.25f});
-    } else {
-        numCompleteLabel->setPosition({container->getContentWidth() / 2 - 2, container->getContentHeight() / 2});
-    }
-    goalLabel->setPosition({container->getContentWidth() / 2 - 3, container->getContentHeight() / 2});
-
-    return container;
 }
 
 void AchievementMenu::addNavigation() {
