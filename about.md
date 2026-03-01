@@ -23,3 +23,5 @@ If you find any bugs or have a suggestion, please open an issue on [github](http
 ![Preview2](therisinglegend.achievements_reimagined/preview2.png?width=300)
 
 ![Preview3](therisinglegend.achievements_reimagined/preview3.png?width=300)
+
+![Preview4](therisinglegend.achievements_reimagined/preview4.png?width=300)
