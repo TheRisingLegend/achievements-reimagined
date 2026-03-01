@@ -432,8 +432,10 @@ void AchievementMenu::addNavigation() {
         menu_selector(AchievementMenu::onCategoryArrow));
     if (m_mainLayer->getPositionX() - m_mainLayer->getContentWidth() / 2 > 40)
         leftArrow->setPosition({-30.f, m_navMenu->getContentHeight() / 2});
-    else
-        leftArrow->setPosition({-16.f, m_navMenu->getContentHeight() / 2});
+    else {
+        leftArrow->setAnchorPoint({0, 0.5f});
+        leftArrow->setPosition({-(getContentWidth() - m_navMenu->getContentWidth()) / 2, m_navMenu->getContentHeight() / 2});
+    }
     leftArrow->setTag(0);
     leftArrow->setID("left-arrow");
     m_navMenu->addChild(leftArrow);
@@ -447,8 +449,10 @@ void AchievementMenu::addNavigation() {
         menu_selector(AchievementMenu::onCategoryArrow));
     if (m_mainLayer->getPositionX() - m_mainLayer->getContentWidth() / 2 > 40)
         rightArrow->setPosition({m_navMenu->getContentWidth() + 30.f, m_navMenu->getContentHeight() / 2});
-    else
-        rightArrow->setPosition({m_navMenu->getContentWidth() + 6.f, m_navMenu->getContentHeight() / 2});
+    else {
+        rightArrow->setAnchorPoint({1, 0.5f});
+        rightArrow->setPosition({m_navMenu->getContentWidth() + (getContentWidth() - m_navMenu->getContentWidth()) / 2, m_navMenu->getContentHeight() / 2});
+    }
     rightArrow->setTag(1);
     rightArrow->setID("right-arrow");
     m_navMenu->addChild(rightArrow);
